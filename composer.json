@@ -1,0 +1,23 @@
+{
+    "name": "boedah/robo-drush",
+    "description": "Drush CommandStack for Robo Task Runner",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Peter Gasser",
+            "email": "dev@boedah.de"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Boedah\\Robo\\Task\\": "src"
+        }
+    },
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "require-dev": {
+        "codegyre/robo": "dev-master",
+        "phpunit/phpunit": "~3.7"
+    }
+}
