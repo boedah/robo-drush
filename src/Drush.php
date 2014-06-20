@@ -261,13 +261,14 @@ class DrushStackTask extends CommandStack
     {
         $this->printTaskInfo('Do database updates');
         $this->exec('updb');
-        if (-1 === version_compare($this->drushVersion, '6.0')) {
+        $drushVersion = $this->getVersion();
+        if (-1 === version_compare($drushVersion, '6.0')) {
             $this->printTaskInfo('Will clear cache after db updates for drush '
-                . $this->drushVersion);
+                . $drushVersion);
             $this->clearCache();
         } else {
             $this->printTaskInfo('Will not clear cache after db updates, since drush '
-                . $this->drushVersion . ' should do it automatically');
+                . $drushVersion . ' should do it automatically');
         }
 
         return $this;
