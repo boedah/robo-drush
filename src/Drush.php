@@ -61,6 +61,9 @@ class DrushStackTask extends CommandStack
      */
     protected $siteAlias;
 
+    /**
+     * @var string
+     */
     protected $drushVersion;
 
     public function __construct($pathToDrush = 'drush')
@@ -208,9 +211,9 @@ class DrushStackTask extends CommandStack
     }
 
     /**
-     * Echoes and returns the drush version.
+     * Returns the drush version.
      *
-     * @return $this
+     * @return string
      */
     public function getVersion()
     {
