@@ -56,4 +56,12 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, preg_match_all('#drush @qa comm#', $command));
     }
 
+    public function testDrushStatus()
+    {
+        $this->taskDrushStack(__DIR__ . '/../vendor/bin/drush')
+            ->printed(false)
+            ->status()
+            ->run();
+    }
+
 }
