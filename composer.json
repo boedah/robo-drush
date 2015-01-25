@@ -19,5 +19,8 @@
     "require-dev": {
         "codegyre/robo": "0.4.5",
         "phpunit/phpunit": "~3.7"
+    },
+    "conflict": {
+        "codegyre/robo": ">=0.4.6"
     }
 }
