@@ -9,18 +9,25 @@ Runs Drush commands in stack. You can define global options for all commands (li
 The option -y is always set, as it makes sense in a task runner.
 
 ## Table of contents
+
+- [Versions](#versions)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Examples](#examples)
 
 ## Installation
 
-Add `"boedah/robo-drush": "~1.0"` to your composer.json:
+### Versions
+
+- `~1.0`: Robo <= 0.4.5
+- `~2.0`: Robo >= 0.5.0
+
+Add `"boedah/robo-drush": "~2.0"` to your composer.json:
 
 ```json
     {
         "require-dev": {
-            "boedah/robo-drush": "~1.0"
+            "boedah/robo-drush": "~2.0"
         }
     }
 ```
@@ -29,11 +36,15 @@ Execute `composer update`.
 
 ## Usage
 
-Use the `Drush` trait in your RoboFile:
+Use the trait (according to your used version) in your RoboFile:
 
 ```php
 class RoboFile extends \Robo\Tasks
 {
+    // if you use ~2.0 for Robo ~0.5
+    use \Boedah\Robo\Task\Drush\loadTasks;
+
+    // if you use ~1.0 for Robo ~0.4
     use \Boedah\Robo\Task\Drush;
 
     //...

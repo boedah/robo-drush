@@ -3,6 +3,21 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
+## [2.0.0] - 2015-01-25
+
+Release for Robo >=0.5 (not compatible with 0.4.*!).
+
+### Changed
+
+- Trait name to `\Boedah\Robo\Task\Drush\loadTasks` in line with Robo tasks
+- Task name from `DrushStackTask` to `DrushStack`
+
+## [1.0.3] - 2015-01-25
+
+### Added
+
+- `conflict` section in composer.json
+
 ## [1.0.2] - 2015-01-25
 
 ### Added
@@ -26,6 +41,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Initial commit
 
-[unreleased]: https://github.com/boedah/robo-drush/compare/1.0.1...HEAD
+[unreleased]: https://github.com/boedah/robo-drush/compare/2.0.0...HEAD
 [1.0.1]: https://github.com/boedah/robo-drush/compare/1.0.0...1.0.1
 [1.0.2]: https://github.com/boedah/robo-drush/compare/1.0.1...1.0.2
+[1.0.3]: https://github.com/boedah/robo-drush/compare/1.0.2...1.0.3
+[2.0.0]: https://github.com/boedah/robo-drush/compare/1.0.3...2.0.0
