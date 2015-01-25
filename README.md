@@ -8,7 +8,45 @@ Runs Drush commands in stack. You can define global options for all commands (li
 
 The option -y is always set, as it makes sense in a task runner.
 
-``` php
+## Table of contents
+- [Installation](#installation)
+- [Usage](#usage)
+- [Examples](#examples)
+
+## Installation
+
+Add `"boedah/robo-drush": "~1.0"` to your composer.json:
+
+```json
+    {
+        "require-dev": {
+            "boedah/robo-drush": "~1.0"
+        }
+    }
+```
+
+Execute `composer update`.
+
+## Usage
+
+Use the `Drush` trait in your RoboFile:
+
+```php
+class RoboFile extends \Robo\Tasks
+{
+    use \Boedah\Robo\Task\Drush;
+
+    //...
+}
+```
+
+## Examples
+
+### Site update
+
+This executes pending database updates and reverts all features (from code to database):
+
+```php
 $this->taskDrushStack()
     ->drupalRootDirectory('/var/www/html/some-site')
     ->uri('sub.example.com')
@@ -19,9 +57,9 @@ $this->taskDrushStack()
     ->run();
 ```
 
-Example site install command:
+### Site install
 
-``` php
+```php
 $this->taskDrushStack()
   ->siteName('Site Name')
   ->siteMail('site-mail@example.com')
