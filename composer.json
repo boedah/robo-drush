@@ -10,17 +10,17 @@
     ],
     "autoload": {
         "psr-4": {
-            "Boedah\\Robo\\Task\\": "src"
+            "Boedah\\Robo\\Task\\Drush\\": "src"
         }
     },
     "require": {
         "php": ">=5.4.0"
     },
     "require-dev": {
-        "codegyre/robo": "0.4.7",
+        "codegyre/robo": "~0.5",
         "phpunit/phpunit": "~4.4"
     },
     "conflict": {
-        "codegyre/robo": ">=0.4.6"
+        "codegyre/robo": "~0.4"
     }
 }

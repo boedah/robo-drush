@@ -1,15 +1,8 @@
 <?php
 
-use Symfony\Component\Console\Tests\Fixtures\DummyOutput;
-
-class DrushStackTaskTest extends \PHPUnit_Framework_TestCase
+class DrushStackTest extends \PHPUnit_Framework_TestCase
 {
-    use Boedah\Robo\Task\Drush;
-
-    public function setUp()
-    {
-        Robo\Runner::setPrinter(new DummyOutput);
-    }
+    use Boedah\Robo\Task\Drush\loadTasks;
 
     public function testYesIsAssumed()
     {

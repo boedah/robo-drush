@@ -1,10 +1,10 @@
 <?php
 
-require __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 class RoboFile extends \Robo\Tasks
 {
-    use \Boedah\Robo\Task\Drush;
+    use \Boedah\Robo\Task\Drush\loadTasks;
 
     public function test()
     {

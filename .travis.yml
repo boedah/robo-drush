@@ -4,7 +4,7 @@ php:
   - 5.5
   - 5.4
 install:
-  - composer install
+  - composer update
 script:
   - vendor/bin/robo test
 

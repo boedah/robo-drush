@@ -1,19 +1,9 @@
 <?php
-namespace Boedah\Robo\Task;
 
-use Robo\Output;
-use Robo\Task\Shared\CommandStack;
-use Robo\Task\Shared\Executable;
+namespace Boedah\Robo\Task\Drush;
 
-trait Drush
-{
-
-    protected function taskDrushStack($pathToDrush = 'drush')
-    {
-        return new DrushStackTask($pathToDrush);
-    }
-
-}
+use Robo\Common\ExecOneCommand;
+use Robo\Task\CommandStack;
 
 /**
  * Runs Drush commands in stack. You can use `stopOnFail()` to point that stack should be terminated on first fail.
@@ -48,10 +38,9 @@ trait Drush
  *   ->run();
  * ```
  */
-class DrushStackTask extends CommandStack
+class DrushStack extends CommandStack
 {
-    use Output;
-    use Executable;
+    use ExecOneCommand;
 
     /**
      * Drush site alias.
