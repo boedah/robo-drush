@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
+## [2.0.1] - 2015-01-25
+
+### Fixed
+
+- Robo version in `conflict` section of composer.json
+
 ## [2.0.0] - 2015-01-25
 
 Release for Robo >=0.5 (not compatible with 0.4.*!).
@@ -41,8 +47,9 @@ Release for Robo >=0.5 (not compatible with 0.4.*!).
 ### Added
 - Initial commit
 
-[unreleased]: https://github.com/boedah/robo-drush/compare/2.0.0...HEAD
+[unreleased]: https://github.com/boedah/robo-drush/compare/2.0.1...HEAD
 [1.0.1]: https://github.com/boedah/robo-drush/compare/1.0.0...1.0.1
 [1.0.2]: https://github.com/boedah/robo-drush/compare/1.0.1...1.0.2
 [1.0.3]: https://github.com/boedah/robo-drush/compare/1.0.2...1.0.3
 [2.0.0]: https://github.com/boedah/robo-drush/compare/1.0.3...2.0.0
+[2.0.1]: https://github.com/boedah/robo-drush/compare/2.0.1...2.0.1
