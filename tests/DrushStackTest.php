@@ -58,10 +58,11 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase
 
     public function testDrushStatus()
     {
-        $this->taskDrushStack(__DIR__ . '/../vendor/bin/drush')
+        $result = $this->taskDrushStack(__DIR__ . '/../vendor/bin/drush')
             ->printed(false)
             ->status()
             ->run();
+        $this->assertTrue($result->wasSuccessful(), 'Exit code was: ' . $result->getExitCode());
     }
 
 }
