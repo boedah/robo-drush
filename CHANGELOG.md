@@ -3,6 +3,15 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
+## [2.0.2] - 2015-02-21
+
+You have to use `"codegyre/robo": "dev-master"` in your composer.json,
+since there is no new release which includes https://github.com/Codegyre/Robo/pull/114.
+
+### Fixed
+
+- strict warning about 'same property'
+
 ## [2.0.1] - 2015-01-25
 
 ### Fixed
@@ -47,9 +56,10 @@ Release for Robo >=0.5 (not compatible with 0.4.*!).
 ### Added
 - Initial commit
 
-[unreleased]: https://github.com/boedah/robo-drush/compare/2.0.1...HEAD
+[unreleased]: https://github.com/boedah/robo-drush/compare/2.0.2...HEAD
 [1.0.1]: https://github.com/boedah/robo-drush/compare/1.0.0...1.0.1
 [1.0.2]: https://github.com/boedah/robo-drush/compare/1.0.1...1.0.2
 [1.0.3]: https://github.com/boedah/robo-drush/compare/1.0.2...1.0.3
 [2.0.0]: https://github.com/boedah/robo-drush/compare/1.0.3...2.0.0
-[2.0.1]: https://github.com/boedah/robo-drush/compare/2.0.1...2.0.1
+[2.0.1]: https://github.com/boedah/robo-drush/compare/2.0.0...2.0.1
+[2.0.2]: https://github.com/boedah/robo-drush/compare/2.0.1...2.0.2
