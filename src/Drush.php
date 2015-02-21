@@ -2,7 +2,7 @@
 
 namespace Boedah\Robo\Task\Drush;
 
-use Robo\Common\ExecOneCommand;
+use Robo\Common\CommandArguments;
 use Robo\Task\CommandStack;
 
 /**
@@ -40,7 +40,7 @@ use Robo\Task\CommandStack;
  */
 class DrushStack extends CommandStack
 {
-    use ExecOneCommand;
+    use CommandArguments;
 
     /**
      * Drush site alias.
