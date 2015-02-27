@@ -3,6 +3,19 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
+## [2.1.0] - 2015-02-27
+
+This version is the first one working without strict errors using Robo >=0.5.2.
+
+### Added
+
+- Robo dependency to `~0.5.2` (and removed `conflict` section)
+
+### Fixed
+
+- PSR-4 autoloading (renamed `Drush.php` to `DrushStack.php`
+- PHPUnit deprecation warning
+
 ## [2.0.2] - 2015-02-21
 
 You have to use `"codegyre/robo": "dev-master"` in your composer.json,
@@ -56,10 +69,11 @@ Release for Robo >=0.5 (not compatible with 0.4.*!).
 ### Added
 - Initial commit
 
-[unreleased]: https://github.com/boedah/robo-drush/compare/2.0.2...HEAD
+[unreleased]: https://github.com/boedah/robo-drush/compare/2.1.0...HEAD
 [1.0.1]: https://github.com/boedah/robo-drush/compare/1.0.0...1.0.1
 [1.0.2]: https://github.com/boedah/robo-drush/compare/1.0.1...1.0.2
 [1.0.3]: https://github.com/boedah/robo-drush/compare/1.0.2...1.0.3
 [2.0.0]: https://github.com/boedah/robo-drush/compare/1.0.3...2.0.0
 [2.0.1]: https://github.com/boedah/robo-drush/compare/2.0.0...2.0.1
 [2.0.2]: https://github.com/boedah/robo-drush/compare/2.0.1...2.0.2
+[2.1.0]: https://github.com/boedah/robo-drush/compare/2.0.2...2.1.0
