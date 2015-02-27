@@ -20,14 +20,14 @@ The option -y is always set, as it makes sense in a task runner.
 ### Versions
 
 - `~1.0`: Robo <= 0.4.5
-- `~2.0`: Robo >= 0.5.0
+- `~2.1`: Robo >= 0.5.2
 
-Add `"boedah/robo-drush": "~2.0"` to your composer.json:
+Add `"boedah/robo-drush": "~2.1"` to your composer.json:
 
 ```json
     {
         "require-dev": {
-            "boedah/robo-drush": "~2.0"
+            "boedah/robo-drush": "~2.1"
         }
     }
 ```
@@ -41,7 +41,7 @@ Use the trait (according to your used version) in your RoboFile:
 ```php
 class RoboFile extends \Robo\Tasks
 {
-    // if you use ~2.0 for Robo ~0.5
+    // if you use ~2.1 for Robo ~0.5.2
     use \Boedah\Robo\Task\Drush\loadTasks;
 
     // if you use ~1.0 for Robo ~0.4
