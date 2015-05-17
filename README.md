@@ -2,7 +2,7 @@
 
 Extension to execute Drush commands in [Robo](https://github.com/Codegyre/Robo).
 
-[![Build Status](https://travis-ci.org/boedah/robo-drush.svg?branch=master)](https://travis-ci.org/boedah/robo-drush) [![Latest Stable Version](https://poser.pugx.org/boedah/robo-drush/v/stable.png)](https://packagist.org/packages/boedah/robo-drush) [![Total Downloads](https://poser.pugx.org/boedah/robo-drush/downloads.png)](https://packagist.org/packages/boedah/robo-drush) [![Latest Unstable Version](https://poser.pugx.org/boedah/robo-drush/v/unstable.png)](https://packagist.org/packages/boedah/robo-drush) [![License](https://poser.pugx.org/boedah/robo-drush/license.png)](https://packagist.org/packages/boedah/robo-drush)
+[![Build Status](https://travis-ci.org/boedah/robo-drush.svg?branch=master)](https://travis-ci.org/boedah/robo-drush)  [![Latest Stable Version](https://poser.pugx.org/boedah/robo-drush/v/stable)](https://packagist.org/packages/boedah/robo-drush) [![Total Downloads](https://poser.pugx.org/boedah/robo-drush/downloads)](https://packagist.org/packages/boedah/robo-drush) [![Latest Unstable Version](https://poser.pugx.org/boedah/robo-drush/v/unstable)](https://packagist.org/packages/boedah/robo-drush) [![License](https://poser.pugx.org/boedah/robo-drush/license)](https://packagist.org/packages/boedah/robo-drush)
 
 Runs Drush commands in stack. You can define global options for all commands (like Drupal root and uri).
 
