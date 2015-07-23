@@ -12,6 +12,14 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('drush command -y', $command);
     }
 
+    public function testAbsenceofYes()
+    {
+        $command = $this->taskDrushStack()
+                        ->exec('command', false)
+                        ->getCommand();
+        $this->assertEquals('drush command', $command);
+    }
+
     public function testOptionsArePrependedBeforeEachCommand()
     {
         $command = $this->taskDrushStack()

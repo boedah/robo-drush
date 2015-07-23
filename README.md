@@ -6,7 +6,7 @@ Extension to execute Drush commands in [Robo](https://github.com/Codegyre/Robo).
 
 Runs Drush commands in stack. You can define global options for all commands (like Drupal root and uri).
 
-The option -y is always set, as it makes sense in a task runner.
+The option -y assumed by default but can be overridden on calls to `exec()` by passing `false` as the second parameter.
 
 ## Table of contents
 
