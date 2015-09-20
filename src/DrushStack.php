@@ -317,26 +317,28 @@ class DrushStack extends CommandStack
      * Runs the given drush command.
      *
      * @param string $command
+     * @param bool $prompt
      * @return $this
      */
-    public function exec($command)
+    public function exec($command, $assumeYes = true)
     {
         if (is_array($command)) {
             $command = implode(' ', array_filter($command));
         }
 
-        return parent::exec($this->injectArguments($command));
+        return parent::exec($this->injectArguments($command, $assumeYes));
     }
 
-    /**
-     * Prepends site-alias and appends arguments to the command.
-     *
-     * @param string $command
-     * @return string the modified command string
-     */
-    protected function injectArguments($command)
+  /**
+   * Prepends site-alias and appends arguments to the command.
+   *
+   * @param string $command
+   * @param bool $assumeYes
+   * @return string the modified command string
+   */
+    protected function injectArguments($command, $assumeYes)
     {
-        return $this->siteAlias . ' ' . $command . ' -y' . $this->arguments;
+        return $this->siteAlias . ' ' . $command . ($assumeYes ? ' -y' : '') . $this->arguments;
     }
 
 }
