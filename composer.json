@@ -1,5 +1,5 @@
 {
-    "name": "boedah/robo-drush",
+    "name": "lussoluca/robo-drush",
     "description": "Drush CommandStack for Robo Task Runner",
     "license": "MIT",
     "authors": [
