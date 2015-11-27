@@ -3,6 +3,18 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
+## [2.2.1] - 2015-11-27
+
+### Changed
+
+- Robo dependency to `>=0.5.2`, which means all future versions. As Robo is in pre-1.0 stage, this seems to make sense.
+
+## [2.2.0] - 2015-09-20
+
+### Added
+
+- second parameter `assumeYes` (default `true`) to `exec()`
+
 ## [2.1.0] - 2015-02-27
 
 This version is the first one working without strict errors using Robo >=0.5.2.
@@ -77,3 +89,5 @@ Release for Robo >=0.5 (not compatible with 0.4.*!).
 [2.0.1]: https://github.com/boedah/robo-drush/compare/2.0.0...2.0.1
 [2.0.2]: https://github.com/boedah/robo-drush/compare/2.0.1...2.0.2
 [2.1.0]: https://github.com/boedah/robo-drush/compare/2.0.2...2.1.0
+[2.2.0]: https://github.com/boedah/robo-drush/compare/2.1.0...2.2.0
+[2.2.1]: https://github.com/boedah/robo-drush/compare/2.2.0...2.2.1
