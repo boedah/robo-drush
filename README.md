@@ -41,7 +41,7 @@ Use the trait (according to your used version) in your RoboFile:
 ```php
 class RoboFile extends \Robo\Tasks
 {
-    // if you use ~2.1 for Robo ~0.5.2
+    // if you use ~2.1 for Robo >=0.5.2
     use \Boedah\Robo\Task\Drush\loadTasks;
 
     // if you use ~1.0 for Robo ~0.4
