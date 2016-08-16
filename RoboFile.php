@@ -13,6 +13,7 @@ class RoboFile extends \Robo\Tasks
             ->option('strict-coverage')
             ->option('-v')
             ->option('-d error_reporting=-1')
+            ->bootstrap('vendor/autoload.php')
             ->arg('tests')
             ->run();
     }
