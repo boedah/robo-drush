@@ -42,6 +42,36 @@ class DrushStack extends CommandStack
 {
     use CommandArguments;
 
+    protected $agumentsForNextCommand;
+
+    /**
+     * Pass argument to executable; applies to the
+     * next command only.
+     *
+     * @param $arg
+     * @return $this
+     */
+    protected function argForNextCommand($arg)
+    {
+        return $this->argsForNextCommand($arg);
+    }
+
+    /**
+     * Pass methods parameters as arguments to executable;
+     * applies to the next command only.
+     *
+     * @param $args
+     * @return $this
+     */
+    protected function argsForNextCommand($args)
+    {
+        if (!is_array($args)) {
+            $args = func_get_args();
+        }
+        $this->agumentsForNextCommand .= " ".implode(' ', $args);
+        return $this;
+    }
+
     /**
      * Drush site alias.
      * We need to save this, since it needs to be the first argument.
@@ -107,77 +137,77 @@ class DrushStack extends CommandStack
 
     public function siteName($siteName)
     {
-        $this->arg('--site-name=' . escapeshellarg($siteName));
+        $this->argForNextCommand('--site-name=' . escapeshellarg($siteName));
 
         return $this;
     }
 
     public function siteMail($siteMail)
     {
-        $this->arg('--site-mail=' . $siteMail);
+        $this->argForNextCommand('--site-mail=' . $siteMail);
 
         return $this;
     }
 
     public function sitesSubdir($sitesSubdir)
     {
-        $this->arg('--sites-subdir=' . $sitesSubdir);
+        $this->argForNextCommand('--sites-subdir=' . $sitesSubdir);
 
         return $this;
     }
 
     public function locale($locale)
     {
-        $this->arg('--locale=' . $locale);
+        $this->argForNextCommand('--locale=' . $locale);
 
         return $this;
     }
 
     public function accountMail($accountMail)
     {
-        $this->arg('--account-mail=' . $accountMail);
+        $this->argForNextCommand('--account-mail=' . $accountMail);
 
         return $this;
     }
 
     public function accountName($accountName)
     {
-        $this->arg('--account-name=' . escapeshellarg($accountName));
+        $this->argForNextCommand('--account-name=' . escapeshellarg($accountName));
 
         return $this;
     }
 
     public function accountPass($accountPass)
     {
-        $this->arg('--account-pass=' . $accountPass);
+        $this->argForNextCommand('--account-pass=' . $accountPass);
 
         return $this;
     }
 
     public function dbPrefix($dbPrefix)
     {
-        $this->arg('--db-prefix=' . $dbPrefix);
+        $this->argForNextCommand('--db-prefix=' . $dbPrefix);
 
         return $this;
     }
 
     public function dbSu($dbSu)
     {
-        $this->arg('--db-su=' . $dbSu);
+        $this->argForNextCommand('--db-su=' . $dbSu);
 
         return $this;
     }
 
     public function dbSuPw($dbSuPw)
     {
-        $this->arg('--db-su-pw=' . $dbSuPw);
+        $this->argForNextCommand('--db-su-pw=' . $dbSuPw);
 
         return $this;
     }
 
     public function dbUrl($dbUrl)
     {
-        $this->arg('--db-url=' . escapeshellarg($dbUrl));
+        $this->argForNextCommand('--db-url=' . escapeshellarg($dbUrl));
 
         return $this;
     }
@@ -194,7 +224,7 @@ class DrushStack extends CommandStack
 
     public function disableUpdateStatusModule()
     {
-        $this->arg('install_configure_form.update_status_module=0');
+        $this->argForNextCommand('install_configure_form.update_status_module=0');
 
         return $this;
     }
@@ -228,7 +258,7 @@ class DrushStack extends CommandStack
      */
     public function status()
     {
-        return $this->exec('status');
+        return $this->drush('status');
     }
 
     /**
@@ -241,7 +271,7 @@ class DrushStack extends CommandStack
     {
         $this->printTaskInfo('Clear cache');
 
-        return $this->exec('cc ' . $name);
+        return $this->drush('cc ' . $name);
     }
 
     /**
@@ -252,7 +282,7 @@ class DrushStack extends CommandStack
     public function updateDb()
     {
         $this->printTaskInfo('Do database updates');
-        $this->exec('updb');
+        $this->drush('updb');
         $drushVersion = $this->getVersion();
         if (-1 === version_compare($drushVersion, '6.0')) {
             $this->printTaskInfo('Will clear cache after db updates for drush '
@@ -277,7 +307,7 @@ class DrushStack extends CommandStack
         $this->printTaskInfo('Revert all features');
         $args = $excludedFeatures . ($force ? ' --force' : '');
 
-        return $this->exec('fra ' . $args);
+        return $this->drush('fra ' . $args);
     }
 
     /**
@@ -289,7 +319,7 @@ class DrushStack extends CommandStack
     {
         $this->printTaskInfo('Turn maintenance mode on');
 
-        return $this->exec('vset --exact maintenance_mode 1');
+        return $this->drush('vset --exact maintenance_mode 1');
     }
 
     /**
@@ -301,7 +331,7 @@ class DrushStack extends CommandStack
     {
         $this->printTaskInfo('Turn maintenance mode off');
 
-        return $this->exec('vdel --exact maintenance_mode');
+        return $this->drush('vdel --exact maintenance_mode');
     }
 
     /**
@@ -310,7 +340,7 @@ class DrushStack extends CommandStack
      */
     public function siteInstall($installationProfile)
     {
-        return $this->exec('site-install ' . $installationProfile);
+        return $this->drush('site-install ' . $installationProfile);
     }
 
     /**
@@ -320,25 +350,27 @@ class DrushStack extends CommandStack
      * @param bool $prompt
      * @return $this
      */
-    public function exec($command, $assumeYes = true)
+    public function drush($command, $assumeYes = true)
     {
         if (is_array($command)) {
             $command = implode(' ', array_filter($command));
         }
 
-        return parent::exec($this->injectArguments($command, $assumeYes));
+        return $this->exec($this->injectArguments($command, $assumeYes));
     }
 
-  /**
-   * Prepends site-alias and appends arguments to the command.
-   *
-   * @param string $command
-   * @param bool $assumeYes
-   * @return string the modified command string
-   */
+    /**
+     * Prepends site-alias and appends arguments to the command.
+     *
+     * @param string $command
+     * @param bool $assumeYes
+     * @return string the modified command string
+     */
     protected function injectArguments($command, $assumeYes)
     {
-        return $this->siteAlias . ' ' . $command . ($assumeYes ? ' -y' : '') . $this->arguments;
-    }
+        $cmd = $this->siteAlias . ' ' . $command . ($assumeYes ? ' -y' : '') . $this->arguments . $this->agumentsForNextCommand;
+        $this->agumentsForNextCommand = '';
 
+        return $cmd;
+    }
 }

@@ -21,13 +21,14 @@ The option -y assumed by default but can be overridden on calls to `exec()` by p
 
 - `~1.0`: Robo <= 0.4.5
 - `~2.1`: Robo >= 0.5.2
+- '~3.0': Robo >= 1.0.0-RC1
 
-Add `"boedah/robo-drush": "~2.1"` to your composer.json:
+Add `"boedah/robo-drush": "~3"` to your composer.json:
 
 ```json
     {
         "require-dev": {
-            "boedah/robo-drush": "~2.1"
+            "boedah/robo-drush": "~3"
         }
     }
 ```
@@ -41,12 +42,20 @@ Use the trait (according to your used version) in your RoboFile:
 ```php
 class RoboFile extends \Robo\Tasks
 {
-    // if you use ~2.1 for Robo >=0.5.2
+    // if you use ~2.1 for Robo >=0.5.2, or ~3 for Robo >=1.0.0-RC1
     use \Boedah\Robo\Task\Drush\loadTasks;
 
     // if you use ~1.0 for Robo ~0.4
     use \Boedah\Robo\Task\Drush;
 
+    // include for Robo >=1.0.0
+    public function getServiceProviders()
+    {
+        return [
+            \Boedah\Robo\Task\Drush\loadTasks::getDrushServices(),
+        ];
+    }
+    
     //...
 }
 ```
