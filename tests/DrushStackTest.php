@@ -15,8 +15,15 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
     // Set up the Robo container so that we can create tasks in our tests.
     function setup()
     {
-        $container = Robo::createDefaultContainer(null, new NullOutput(), [ \Boedah\Robo\Task\Drush\loadTasks::getDrushServices() ]);
+        $container = Robo::createDefaultContainer(null, new NullOutput());
         $this->setContainer($container);
+    }
+
+    // Scaffold the collection builder
+    public function collectionBuilder()
+    {
+        $emptyRobofile = new \Robo\Tasks;
+        return $this->getContainer()->get('collectionBuilder', [$emptyRobofile]);
     }
 
     public function testYesIsAssumed()

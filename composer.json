@@ -1,5 +1,5 @@
 {
-    "name": "boedah/robo-drush",
+    "name": "greg-1-anderson/robo-drush",
     "description": "Drush CommandStack for Robo Task Runner",
     "type": "robo-tasks",
     "license": "MIT",
@@ -16,7 +16,7 @@
     },
     "require": {
         "php": ">=5.5.0",
-        "consolidation/robo": "dev-master"
+        "consolidation/Robo": "dev-remove-services"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.4",

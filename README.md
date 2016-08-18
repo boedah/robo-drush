@@ -47,14 +47,6 @@ class RoboFile extends \Robo\Tasks
 
     // if you use ~1.0 for Robo ~0.4
     use \Boedah\Robo\Task\Drush;
-
-    // include for Robo >=1.0.0
-    public function getServiceProviders()
-    {
-        return [
-            \Boedah\Robo\Task\Drush\loadTasks::getDrushServices(),
-        ];
-    }
     
     //...
 }
