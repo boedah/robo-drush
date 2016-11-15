@@ -12,6 +12,7 @@ The option -y assumed by default but can be overridden on calls to `exec()` by p
 
 - [Versions](#versions)
 - [Installation](#installation)
+- [Testing](#testing)
 - [Usage](#usage)
 - [Examples](#examples)
 
@@ -34,6 +35,10 @@ Add `"boedah/robo-drush": "~3"` to your composer.json:
 ```
 
 Execute `composer update`.
+
+## Testing
+
+`composer test`
 
 ## Usage
 
