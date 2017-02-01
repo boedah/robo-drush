@@ -10,6 +10,6 @@ trait loadTasks
      */
     protected function taskDrushStack($pathToDrush = 'drush')
     {
-        return new DrushStack($pathToDrush);
+        return $this->task(DrushStack::class, $pathToDrush);
     }
 }

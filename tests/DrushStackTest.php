@@ -1,13 +1,35 @@
 <?php
 
-class DrushStackTest extends \PHPUnit_Framework_TestCase
+use League\Container\ContainerAwareInterface;
+use League\Container\ContainerAwareTrait;
+use Symfony\Component\Console\Output\NullOutput;
+use Robo\TaskAccessor;
+use Robo\Robo;
+
+class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwareInterface
 {
-    use Boedah\Robo\Task\Drush\loadTasks;
+    use \Boedah\Robo\Task\Drush\loadTasks;
+    use TaskAccessor;
+    use ContainerAwareTrait;
+
+    // Set up the Robo container so that we can create tasks in our tests.
+    function setup()
+    {
+        $container = Robo::createDefaultContainer(null, new NullOutput());
+        $this->setContainer($container);
+    }
+
+    // Scaffold the collection builder
+    public function collectionBuilder()
+    {
+        $emptyRobofile = new \Robo\Tasks;
+        return $this->getContainer()->get('collectionBuilder', [$emptyRobofile]);
+    }
 
     public function testYesIsAssumed()
     {
         $command = $this->taskDrushStack()
-            ->exec('command')
+            ->drush('command')
             ->getCommand();
         $this->assertEquals('drush command -y', $command);
     }
@@ -15,8 +37,8 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase
     public function testAbsenceofYes()
     {
         $command = $this->taskDrushStack()
-                        ->exec('command', false)
-                        ->getCommand();
+            ->drush('command', false)
+            ->getCommand();
         $this->assertEquals('drush command', $command);
     }
 
@@ -24,8 +46,8 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase
     {
         $command = $this->taskDrushStack()
             ->drupalRootDirectory('/var/www/html/app')
-            ->exec('command-1')
-            ->exec('command-2')
+            ->drush('command-1')
+            ->drush('command-2')
             ->getCommand();
         $this->assertEquals(2, preg_match_all('#-r /var/www/html/app#', $command));
     }
@@ -58,8 +80,8 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase
         $command = $this->taskDrushStack()
             ->drupalRootDirectory('/var/www/html/app')
             ->siteAlias('@qa')
-            ->exec('command-1')
-            ->exec('command-2')
+            ->drush('command-1')
+            ->drush('command-2')
             ->getCommand();
         $this->assertEquals(2, preg_match_all('#drush @qa comm#', $command));
     }

@@ -1,6 +1,7 @@
 {
     "name": "boedah/robo-drush",
     "description": "Drush CommandStack for Robo Task Runner",
+    "type": "robo-tasks",
     "license": "MIT",
     "authors": [
         {
@@ -8,17 +9,23 @@
             "email": "dev@boedah.de"
         }
     ],
+    "scripts": {
+        "test": "robo --ansi test"
+    },
     "autoload": {
         "psr-4": {
             "Boedah\\Robo\\Task\\Drush\\": "src"
         }
     },
     "require": {
-        "php": ">=5.4.0",
-        "codegyre/robo": ">=0.5.2"
+        "php": ">=5.5.0",
+        "consolidation/Robo": "~1"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.4",
-        "drush/drush": "~6.5"
+        "drush/drush": "~8"
+    },
+    "suggest": {
+        "drush/drush": "robo-drush needs a global or local Drush to use."
     }
 }
