@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
+## [3.0.2] - 2017-02-01
+
+### Changed
+
+- consolidation/robo dependency to `~1`
+
 ## [2.2.1] - 2015-11-27
 
 ### Changed
@@ -91,3 +97,4 @@ Release for Robo >=0.5 (not compatible with 0.4.*!).
 [2.1.0]: https://github.com/boedah/robo-drush/compare/2.0.2...2.1.0
 [2.2.0]: https://github.com/boedah/robo-drush/compare/2.1.0...2.2.0
 [2.2.1]: https://github.com/boedah/robo-drush/compare/2.2.0...2.2.1
+[3.0.2]: https://github.com/boedah/robo-drush/compare/2.2.1...3.0.2
