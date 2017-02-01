@@ -42,35 +42,7 @@ class DrushStack extends CommandStack
 {
     use CommandArguments;
 
-    protected $agumentsForNextCommand;
-
-    /**
-     * Pass argument to executable; applies to the
-     * next command only.
-     *
-     * @param $arg
-     * @return $this
-     */
-    protected function argForNextCommand($arg)
-    {
-        return $this->argsForNextCommand($arg);
-    }
-
-    /**
-     * Pass methods parameters as arguments to executable;
-     * applies to the next command only.
-     *
-     * @param $args
-     * @return $this
-     */
-    protected function argsForNextCommand($args)
-    {
-        if (!is_array($args)) {
-            $args = func_get_args();
-        }
-        $this->agumentsForNextCommand .= " ".implode(' ', $args);
-        return $this;
-    }
+    protected $argumentsForNextCommand;
 
     /**
      * Drush site alias.
@@ -142,6 +114,35 @@ class DrushStack extends CommandStack
         return $this;
     }
 
+    /**
+     * Add an argument used in the next invocation of drush.
+     *
+     * @param string $arg
+     *
+     * @return $this
+     */
+    protected function argForNextCommand($arg)
+    {
+        return $this->argsForNextCommand($arg);
+    }
+
+    /**
+     * Add multiple arguments used in the next invocation of drush.
+     *
+     * @param array|string $args can also be multiple parameters
+     *
+     * @return $this
+     */
+    protected function argsForNextCommand($args)
+    {
+        if (!is_array($args)) {
+            $args = func_get_args();
+        }
+        $this->argumentsForNextCommand .= ' ' . implode(' ', $args);
+
+        return $this;
+    }
+
     public function siteMail($siteMail)
     {
         $this->argForNextCommand('--site-mail=' . $siteMail);
@@ -205,16 +206,16 @@ class DrushStack extends CommandStack
         return $this;
     }
 
+    public function sqliteDbUrl($relativePath)
+    {
+        return $this->dbUrl('sqlite://' . $relativePath);
+    }
+
     public function dbUrl($dbUrl)
     {
         $this->argForNextCommand('--db-url=' . escapeshellarg($dbUrl));
 
         return $this;
-    }
-
-    public function sqliteDbUrl($relativePath)
-    {
-        return $this->dbUrl('sqlite://' . $relativePath);
     }
 
     public function mysqlDbUrl($dsn)
@@ -225,6 +226,76 @@ class DrushStack extends CommandStack
     public function disableUpdateStatusModule()
     {
         $this->argForNextCommand('install_configure_form.update_status_module=0');
+
+        return $this;
+    }
+
+    /**
+     * Executes `drush status`
+     *
+     * @return $this
+     */
+    public function status()
+    {
+        return $this->drush('status');
+    }
+
+    /**
+     * Runs the given drush command.
+     *
+     * @param string $command
+     * @param bool $assumeYes
+     *
+     * @return $this
+     */
+    public function drush($command, $assumeYes = true)
+    {
+        if (is_array($command)) {
+            $command = implode(' ', array_filter($command));
+        }
+
+        return $this->exec($this->injectArguments($command, $assumeYes));
+    }
+
+    /**
+     * Prepends site-alias and appends arguments to the command.
+     *
+     * @param string $command
+     * @param bool $assumeYes
+     *
+     * @return string the modified command string
+     */
+    protected function injectArguments($command, $assumeYes)
+    {
+        $cmd =
+            $this->siteAlias . ' '
+            . $command
+            . ($assumeYes ? ' -y': '')
+            . $this->arguments
+            . $this->argumentsForNextCommand;
+        $this->argumentsForNextCommand = '';
+
+        return $cmd;
+    }
+
+    /**
+     * Runs pending database updates.
+     *
+     * @return $this
+     */
+    public function updateDb()
+    {
+        $this->printTaskInfo('Do database updates');
+        $this->drush('updb');
+        $drushVersion = $this->getVersion();
+        if (-1 === version_compare($drushVersion, '6.0')) {
+            $this->printTaskInfo('Will clear cache after db updates for drush '
+                . $drushVersion);
+            $this->clearCache();
+        } else {
+            $this->printTaskInfo('Will not clear cache after db updates, since drush '
+                . $drushVersion . ' should do it automatically');
+        }
 
         return $this;
     }
@@ -252,19 +323,10 @@ class DrushStack extends CommandStack
     }
 
     /**
-     * Executes `drush status`
-     *
-     * @return $this
-     */
-    public function status()
-    {
-        return $this->drush('status');
-    }
-
-    /**
      * Clears the given cache.
      *
      * @param string $name cache name
+     *
      * @return $this
      */
     public function clearCache($name = 'all')
@@ -272,28 +334,6 @@ class DrushStack extends CommandStack
         $this->printTaskInfo('Clear cache');
 
         return $this->drush('cc ' . $name);
-    }
-
-    /**
-     * Runs pending database updates.
-     *
-     * @return $this
-     */
-    public function updateDb()
-    {
-        $this->printTaskInfo('Do database updates');
-        $this->drush('updb');
-        $drushVersion = $this->getVersion();
-        if (-1 === version_compare($drushVersion, '6.0')) {
-            $this->printTaskInfo('Will clear cache after db updates for drush '
-                . $drushVersion);
-            $this->clearCache();
-        } else {
-            $this->printTaskInfo('Will not clear cache after db updates, since drush '
-                . $drushVersion . ' should do it automatically');
-        }
-
-        return $this;
     }
 
     /**
@@ -336,41 +376,11 @@ class DrushStack extends CommandStack
 
     /**
      * @param string $installationProfile
+     *
      * @return $this
      */
     public function siteInstall($installationProfile)
     {
         return $this->drush('site-install ' . $installationProfile);
-    }
-
-    /**
-     * Runs the given drush command.
-     *
-     * @param string $command
-     * @param bool $prompt
-     * @return $this
-     */
-    public function drush($command, $assumeYes = true)
-    {
-        if (is_array($command)) {
-            $command = implode(' ', array_filter($command));
-        }
-
-        return $this->exec($this->injectArguments($command, $assumeYes));
-    }
-
-    /**
-     * Prepends site-alias and appends arguments to the command.
-     *
-     * @param string $command
-     * @param bool $assumeYes
-     * @return string the modified command string
-     */
-    protected function injectArguments($command, $assumeYes)
-    {
-        $cmd = $this->siteAlias . ' ' . $command . ($assumeYes ? ' -y' : '') . $this->arguments . $this->agumentsForNextCommand;
-        $this->agumentsForNextCommand = '';
-
-        return $cmd;
     }
 }
