@@ -22,7 +22,7 @@ The option -y assumed by default but can be overridden on calls to `exec()` by p
 
 - `~1.0`: Robo <= 0.4.5
 - `~2.1`: Robo >= 0.5.2
-- '~3.0': Robo >= 1.0.0-RC1
+- `~3.0`: Robo >= 1.0.0-RC1
 
 Add `"boedah/robo-drush": "~3"` to your composer.json:
 
