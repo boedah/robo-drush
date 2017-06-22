@@ -230,6 +230,13 @@ class DrushStack extends CommandStack
         return $this;
     }
 
+    public function configDir($configDir)
+    {
+        $this->argForNextCommand('--config-dir=' . $configDir);
+
+        return $this;
+    }
+
     /**
      * Executes `drush status`
      *
