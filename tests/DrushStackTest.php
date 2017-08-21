@@ -95,4 +95,11 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
         $this->assertTrue($result->wasSuccessful(), 'Exit code was: ' . $result->getExitCode());
     }
 
+    public function testDrushVersion()
+    {
+        $version = $this->taskDrushStack(__DIR__ . '/../vendor/bin/drush')
+            ->getVersion();
+        $this->assertEquals('8.1.12', $version);
+    }
+
 }
