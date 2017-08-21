@@ -5,6 +5,7 @@ use League\Container\ContainerAwareTrait;
 use Symfony\Component\Console\Output\NullOutput;
 use Robo\TaskAccessor;
 use Robo\Robo;
+use Symfony\Component\Filesystem\Filesystem;
 
 class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwareInterface
 {
@@ -13,15 +14,29 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
     use ContainerAwareTrait;
 
     /**
+     * @var \Symfony\Component\Filesystem\Filesystem
+     */
+    protected $fs;
+
+    /**
+     * @var string
+     */
+    protected $tmpDir;
+
+    /**
      * @var string
      */
     protected $tmpReleaseTag;
 
     // Set up the Robo container so that we can create tasks in our tests.
-    function setup()
+    public function setUp()
     {
         $container = Robo::createDefaultContainer(null, new NullOutput());
         $this->setContainer($container);
+
+        // Prepare temp directory.
+        $this->fs = new Filesystem();
+        $this->tmpDir = realpath(sys_get_temp_dir()) . DIRECTORY_SEPARATOR . 'robo-drush';
     }
 
     // Scaffold the collection builder
@@ -102,25 +117,37 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
 
     public function testDrushVersion()
     {
-        $this->writeTestReleaseTag();
-        foreach (['8.1.12', '9.0.0'] as $version) {
-            passthru(escapeshellcmd('rm composer.lock'), $exit_code);
-            $this->composer('require --update-with-dependencies drush/drush:"' . $version .'"');
-            $version2 = $this->taskDrushStack(__DIR__ . '/../vendor/bin/drush')
+        foreach (['8.1.12' => '8.1.12', '9.0.0-beta3' => '9.0.0'] as $version => $version_string) {
+            $this->ensureDirectoryExistsAndClear($this->tmpDir);
+            $this->writeComposerJSON();
+            $this->composer('require --update-with-dependencies drush/drush:"' . $version .'" -vvv');
+            $version2 = $this->taskDrushStack($this->tmpDir . '/vendor/bin/drush')
               ->getVersion();
-            $this->assertEquals($version, $version2);
+            $this->assertEquals($version_string, $version2);
         }
-        $this->git(sprintf('tag -d "%s"', $this->tmpReleaseTag));
     }
 
     /**
-     * Writes a tag for the current commit, so we can reference it directly in the
-     * composer.json.
+     * Writes the default composer json to the temp direcoty.
      */
-    protected function writeTestReleaseTag() {
-        // Tag the current state.
-        $this->tmpReleaseTag = '999.0.' . time();
-        $this->git(sprintf('tag -a "%s" -m "%s"', $this->tmpReleaseTag, 'Tag for testing this exact commit'));
+    protected function writeComposerJSON() {
+      $json = json_encode($this->composerJSONDefaults(), JSON_PRETTY_PRINT);
+      // Write composer.json.
+      file_put_contents($this->tmpDir . '/composer.json', $json);
+    }
+
+    /**
+     * Provides the default composer.json data.
+     *
+     * @return array
+     */
+    protected function composerJSONDefaults() {
+      return array(
+        'require' => array(
+          'drush/drush' => '^8.0 | ^9.0'
+        ),
+        'minimum-stability' => 'beta'
+      );
     }
 
     /**
@@ -130,23 +157,23 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
      *   Composer command name, arguments and/or options
      */
     protected function composer($command) {
-        passthru(escapeshellcmd('composer -q ' . $command), $exit_code);
+        chdir($this->tmpDir);
+        exec(escapeshellcmd('composer -q ' . $command), $output, $exit_code);
         if ($exit_code !== 0) {
-            throw new \Exception('Composer returned a non-zero exit code.');
+            throw new \Exception('Composer returned a non-zero exit code.' . $output);
         }
     }
 
     /**
-     * Wrapper for git command in the root directory.
+     * Makes sure the given directory exists and has no content.
      *
-     * @param $command
-     *   Git command name, arguments and/or options.
+     * @param string $directory
      */
-    protected function git($command) {
-        passthru(escapeshellcmd('git ' . $command), $exit_code);
-        if ($exit_code !== 0) {
-            throw new \Exception('Git returned a non-zero exit code');
-        }
+    protected function ensureDirectoryExistsAndClear($directory) {
+      if (is_dir($directory)) {
+        $this->fs->remove($directory);
+      }
+      mkdir($directory, 0777, true);
     }
 
 }
