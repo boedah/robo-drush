@@ -173,7 +173,7 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
       if (is_dir($directory)) {
         $this->fs->remove($directory);
       }
-      mkdir($directory, 0777, true);
+      $this->fs->mkdir($directory, 0777);
     }
 
 }
