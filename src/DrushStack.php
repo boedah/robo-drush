@@ -317,9 +317,9 @@ class DrushStack extends CommandStack
         if (empty($this->drushVersion)) {
             $isPrinted = $this->isPrinted;
             $this->isPrinted = false;
-            $result = $this->executeCommand($this->executable . ' --version');
+            $result = $this->executeCommand($this->executable . ' version');
             if (!$result->wasSuccessful()) {
-              $result = $this->executeCommand($this->executable . ' version');
+              $result = $this->executeCommand($this->executable . ' --version');
             }
             $output = $result->getMessage();
             $this->drushVersion = 'unknown';
