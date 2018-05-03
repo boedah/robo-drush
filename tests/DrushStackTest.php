@@ -23,11 +23,6 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
      */
     protected $tmpDir;
 
-    /**
-     * @var string
-     */
-    protected $tmpReleaseTag;
-
     // Set up the Robo container so that we can create tasks in our tests.
     public function setUp()
     {
