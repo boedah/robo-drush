@@ -142,9 +142,6 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
      */
     protected function composerJSONDefaults() {
       return array(
-        'require' => array(
-          'drush/drush' => '^8.0 | ^9.0'
-        ),
         'minimum-stability' => 'beta'
       );
     }
