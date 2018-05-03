@@ -112,17 +112,17 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
 
     public function testDrushVersion()
     {
-        foreach (['8.1.15' => '8.1.15', '9.0.0-rc1' => '9.0.0'] as $version => $version_string) {
-            if (version_compare('5.6', phpversion()) > 0 && version_compare($version_string, '9.0') > 0) {
+        foreach (['8.1.15' => '8.1.15', '9.0.0-rc1' => '9.0.0'] as $composerDrushVersion => $expectedVersion) {
+            if (version_compare('5.6', phpversion()) > 0 && version_compare($expectedVersion, '9.0') > 0) {
               continue;
             }
 
             $this->ensureDirectoryExistsAndClear($this->tmpDir);
             $this->writeComposerJSON();
-            $this->composer('require --update-with-dependencies drush/drush:"' . $version . '"');
-            $version2 = $this->taskDrushStack($this->tmpDir . '/vendor/bin/drush')
+            $this->composer('require --update-with-dependencies drush/drush:"' . $composerDrushVersion . '"');
+            $actualVersion = $this->taskDrushStack($this->tmpDir . '/vendor/bin/drush')
               ->getVersion();
-            $this->assertEquals($version_string, $version2);
+            $this->assertEquals($expectedVersion, $actualVersion);
         }
     }
 
