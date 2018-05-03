@@ -14,7 +14,7 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
     use ContainerAwareTrait;
 
     /**
-     * @var \Symfony\Component\Filesystem\Filesystem
+     * @var Filesystem
      */
     protected $fs;
 
