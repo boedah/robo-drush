@@ -121,12 +121,15 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
                 continue;
             }
 
+            $cwd = getcwd();
             $this->ensureDirectoryExistsAndClear($this->tmpDir);
+            chdir($this->tmpDir);
             $this->writeComposerJSON();
             $this->composer('require --update-with-dependencies drush/drush:"' . $composerDrushVersion . '"');
             $actualVersion = $this->taskDrushStack($this->tmpDir . '/vendor/bin/drush')
                 ->getVersion();
             $this->assertEquals($expectedVersion, $actualVersion);
+            chdir($cwd);
         }
     }
 
@@ -160,7 +163,6 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
      */
     protected function composer($command)
     {
-        chdir($this->tmpDir);
         exec(escapeshellcmd('composer -q ' . $command), $output, $exitCode);
         if ($exitCode !== 0) {
             throw new \RuntimeException('Composer returned a non-zero exit code.');
