@@ -17,7 +17,6 @@
             "Boedah\\Robo\\Task\\Drush\\": "src"
         }
     },
-    "minimum-stability": "beta",
     "require": {
         "php": ">=5.5.0",
         "consolidation/Robo": "~1"
