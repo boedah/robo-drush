@@ -112,29 +112,45 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
     }
 
     /**
-     * @throws RuntimeException
+     * @dataProvider drushVersionProvider
+     *
+     * @param string $composerDrushVersion version to require with composer (can be different e.g. for RC versions)
+     * @param string $expectedVersion version to compare
      */
-    public function testDrushVersion()
+    public function testDrushVersion($composerDrushVersion, $expectedVersion = null)
     {
-        foreach ([
-            '8.1.15' => '8.1.15',
-            '9.0.0-rc1' => '9.0.0',
-            '9.4.0' => '9.4.0'
-        ] as $composerDrushVersion => $expectedVersion) {
-            if (version_compare('5.6', phpversion()) > 0 && version_compare($expectedVersion, '9.0') > 0) {
-                continue;
-            }
-
-            $cwd = getcwd();
-            $this->ensureDirectoryExistsAndClear($this->tmpDir);
-            chdir($this->tmpDir);
-            $this->writeComposerJSON();
-            $this->composer('require --no-progress --no-suggest --update-with-dependencies drush/drush:"' . $composerDrushVersion . '"');
-            $actualVersion = $this->taskDrushStack($this->tmpDir . '/vendor/bin/drush')
-                ->getVersion();
-            $this->assertEquals($expectedVersion, $actualVersion);
-            chdir($cwd);
+        if (null === $expectedVersion) {
+            $expectedVersion = $composerDrushVersion;
         }
+        if (version_compare('5.6', phpversion()) > 0 && version_compare($expectedVersion, '9.0') > 0) {
+            $this->markTestSkipped(phpversion() . ' too low for drush ' . $expectedVersion);
+        }
+
+        $cwd = getcwd();
+        $this->ensureDirectoryExistsAndClear($this->tmpDir);
+        chdir($this->tmpDir);
+        $this->writeComposerJSON();
+        $this->composer('require --no-progress --no-suggest --update-with-dependencies drush/drush:"' . $composerDrushVersion . '"');
+        $actualVersion = $this->taskDrushStack($this->tmpDir . '/vendor/bin/drush')
+            ->getVersion();
+        $this->assertEquals($expectedVersion, $actualVersion);
+        chdir($cwd);
+    }
+
+    /**
+     * Should return an array of arrays with the following values:
+     * 0: $composerDrushVersion (can be different e.g. for RC versions
+     * 1: $expectedVersion
+     *
+     * @return array
+     */
+    public function drushVersionProvider()
+    {
+        return [
+            ['8.1.15'],
+            ['9.0.0-rc1', '9.0.0'],
+            ['9.4.0'],
+        ];
     }
 
     /**
