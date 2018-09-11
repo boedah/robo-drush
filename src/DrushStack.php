@@ -180,7 +180,7 @@ class DrushStack extends CommandStack
 
     public function accountPass($accountPass)
     {
-        $this->argForNextCommand('--account-pass=' . $accountPass);
+        $this->argForNextCommand('--account-pass=' . escapeshellarg($accountPass));
 
         return $this;
     }

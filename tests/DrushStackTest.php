@@ -61,7 +61,7 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
             ->locale('de')
             ->accountMail('mail@example.com')
             ->accountName('admin')
-            ->accountPass('pw')
+            ->accountPass($pw)
             ->dbPrefix('drupal_')
             ->dbSu('su_account')
             ->dbSuPw($pw)
@@ -72,7 +72,7 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
         $expected = 'drush site-install minimal -y --site-name=' . escapeshellarg('Site Name')
             . ' --site-mail=site-mail@example.com'
             . ' --locale=de --account-mail=mail@example.com --account-name=' . escapeshellarg('admin')
-            . ' --account-pass=pw'
+            . ' --account-pass=' . escapeshellarg($pw)
             . ' --db-prefix=drupal_ --db-su=su_account --db-su-pw=' . escapeshellarg($pw) . ' --db-url=' . escapeshellarg('sqlite://sit"es/default/.ht.sqlite')
             . ' install_configure_form.update_status_module=0';
         $this->assertEquals($expected, $command);
