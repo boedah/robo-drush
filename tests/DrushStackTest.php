@@ -54,6 +54,7 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
 
     public function testSiteInstallCommand()
     {
+        $pw = 'p"|&w';
         $command = $this->taskDrushStack()
             ->siteName('Site Name')
             ->siteMail('site-mail@example.com')
@@ -62,6 +63,8 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
             ->accountName('admin')
             ->accountPass('pw')
             ->dbPrefix('drupal_')
+            ->dbSu('su_account')
+            ->dbSuPw($pw)
             ->sqliteDbUrl('sit"es/default/.ht.sqlite')
             ->disableUpdateStatusModule()
             ->siteInstall('minimal')
@@ -70,7 +73,7 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
             . ' --site-mail=site-mail@example.com'
             . ' --locale=de --account-mail=mail@example.com --account-name=' . escapeshellarg('admin')
             . ' --account-pass=pw'
-            . ' --db-prefix=drupal_ --db-url=' . escapeshellarg('sqlite://sit"es/default/.ht.sqlite')
+            . ' --db-prefix=drupal_ --db-su=su_account --db-su-pw=' . escapeshellarg($pw) . ' --db-url=' . escapeshellarg('sqlite://sit"es/default/.ht.sqlite')
             . ' install_configure_form.update_status_module=0';
         $this->assertEquals($expected, $command);
     }
