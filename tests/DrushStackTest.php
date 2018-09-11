@@ -2,9 +2,10 @@
 
 use League\Container\ContainerAwareInterface;
 use League\Container\ContainerAwareTrait;
-use Symfony\Component\Console\Output\NullOutput;
-use Robo\TaskAccessor;
 use Robo\Robo;
+use Robo\TaskAccessor;
+use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\Filesystem\Filesystem;
 
 class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwareInterface
 {
@@ -12,17 +13,32 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
     use TaskAccessor;
     use ContainerAwareTrait;
 
+    /**
+     * @var Filesystem
+     */
+    protected $fs;
+
+    /**
+     * @var string
+     */
+    protected $tmpDir;
+
     // Set up the Robo container so that we can create tasks in our tests.
-    function setup()
+    public function setUp()
     {
         $container = Robo::createDefaultContainer(null, new NullOutput());
         $this->setContainer($container);
+
+        // Prepare temp directory.
+        $this->fs = new Filesystem();
+        $this->tmpDir = realpath(sys_get_temp_dir()) . DIRECTORY_SEPARATOR . 'robo-drush';
     }
 
     // Scaffold the collection builder
     public function collectionBuilder()
     {
         $emptyRobofile = new \Robo\Tasks;
+
         return $this->getContainer()->get('collectionBuilder', [$emptyRobofile]);
     }
 
@@ -98,11 +114,94 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
         $this->assertTrue($result->wasSuccessful(), 'Exit code was: ' . $result->getExitCode());
     }
 
-    public function testDrushVersion()
+    /**
+     * @dataProvider drushVersionProvider
+     *
+     * @param string $composerDrushVersion version to require with composer (can be different e.g. for RC versions)
+     * @param string $expectedVersion version to compare
+     */
+    public function testDrushVersion($composerDrushVersion, $expectedVersion = null)
     {
-        $version = $this->taskDrushStack(__DIR__ . '/../vendor/bin/drush')
+        if (null === $expectedVersion) {
+            $expectedVersion = $composerDrushVersion;
+        }
+        if (version_compare('5.6', phpversion()) > 0 && version_compare($expectedVersion, '9.0') > 0) {
+            $this->markTestSkipped(phpversion() . ' too low for drush ' . $expectedVersion);
+        }
+
+        $cwd = getcwd();
+        $this->ensureDirectoryExistsAndClear($this->tmpDir);
+        chdir($this->tmpDir);
+        $this->writeComposerJSON();
+        $this->composer('require --no-progress --no-suggest --update-with-dependencies drush/drush:"' . $composerDrushVersion . '"');
+        $actualVersion = $this->taskDrushStack($this->tmpDir . '/vendor/bin/drush')
             ->getVersion();
-        $this->assertEquals('8.1.12', $version);
+        $this->assertEquals($expectedVersion, $actualVersion);
+        chdir($cwd);
     }
 
+    /**
+     * Should return an array of arrays with the following values:
+     * 0: $composerDrushVersion (can be different e.g. for RC versions
+     * 1: $expectedVersion
+     *
+     * @return array
+     */
+    public function drushVersionProvider()
+    {
+        return [
+            ['8.1.15'],
+            ['9.0.0-rc1', '9.0.0'],
+            ['9.4.0'],
+        ];
+    }
+
+    /**
+     * Writes the default composer json to the temp directory.
+     */
+    protected function writeComposerJSON()
+    {
+        $json = json_encode($this->composerJSONDefaults(), JSON_PRETTY_PRINT);
+        file_put_contents($this->tmpDir . '/composer.json', $json);
+    }
+
+    /**
+     * Provides the default composer.json data.
+     *
+     * @return array
+     */
+    protected function composerJSONDefaults()
+    {
+        return array(
+            'minimum-stability' => 'beta'
+        );
+    }
+
+    /**
+     * Wrapper for the composer command.
+     *
+     * @param string $command composer command name, arguments and/or options
+     *
+     * @throws RuntimeException
+     */
+    protected function composer($command)
+    {
+        exec(escapeshellcmd('composer -q ' . $command), $output, $exitCode);
+        if ($exitCode !== 0) {
+            throw new \RuntimeException('Composer returned a non-zero exit code.');
+        }
+    }
+
+    /**
+     * Makes sure the given directory exists and has no content.
+     *
+     * @param string $directory
+     */
+    protected function ensureDirectoryExistsAndClear($directory)
+    {
+        if (is_dir($directory)) {
+            $this->fs->remove($directory);
+        }
+        $this->fs->mkdir($directory, 0777);
+    }
 }
