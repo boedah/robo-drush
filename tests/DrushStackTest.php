@@ -2,9 +2,9 @@
 
 use League\Container\ContainerAwareInterface;
 use League\Container\ContainerAwareTrait;
-use Symfony\Component\Console\Output\NullOutput;
-use Robo\TaskAccessor;
 use Robo\Robo;
+use Robo\TaskAccessor;
+use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Filesystem\Filesystem;
 
 class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwareInterface
@@ -38,6 +38,7 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
     public function collectionBuilder()
     {
         $emptyRobofile = new \Robo\Tasks;
+
         return $this->getContainer()->get('collectionBuilder', [$emptyRobofile]);
     }
 
@@ -110,29 +111,32 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
         $this->assertTrue($result->wasSuccessful(), 'Exit code was: ' . $result->getExitCode());
     }
 
+    /**
+     * @throws RuntimeException
+     */
     public function testDrushVersion()
     {
         foreach (['8.1.15' => '8.1.15', '9.0.0-rc1' => '9.0.0'] as $composerDrushVersion => $expectedVersion) {
             if (version_compare('5.6', phpversion()) > 0 && version_compare($expectedVersion, '9.0') > 0) {
-              continue;
+                continue;
             }
 
             $this->ensureDirectoryExistsAndClear($this->tmpDir);
             $this->writeComposerJSON();
             $this->composer('require --update-with-dependencies drush/drush:"' . $composerDrushVersion . '"');
             $actualVersion = $this->taskDrushStack($this->tmpDir . '/vendor/bin/drush')
-              ->getVersion();
+                ->getVersion();
             $this->assertEquals($expectedVersion, $actualVersion);
         }
     }
 
     /**
-     * Writes the default composer json to the temp direcoty.
+     * Writes the default composer json to the temp directory.
      */
-    protected function writeComposerJSON() {
-      $json = json_encode($this->composerJSONDefaults(), JSON_PRETTY_PRINT);
-      // Write composer.json.
-      file_put_contents($this->tmpDir . '/composer.json', $json);
+    protected function writeComposerJSON()
+    {
+        $json = json_encode($this->composerJSONDefaults(), JSON_PRETTY_PRINT);
+        file_put_contents($this->tmpDir . '/composer.json', $json);
     }
 
     /**
@@ -140,23 +144,26 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
      *
      * @return array
      */
-    protected function composerJSONDefaults() {
-      return array(
-        'minimum-stability' => 'beta'
-      );
+    protected function composerJSONDefaults()
+    {
+        return array(
+            'minimum-stability' => 'beta'
+        );
     }
 
     /**
      * Wrapper for the composer command.
      *
-     * @param string $command
-     *   Composer command name, arguments and/or options
+     * @param string $command composer command name, arguments and/or options
+     *
+     * @throws RuntimeException
      */
-    protected function composer($command) {
+    protected function composer($command)
+    {
         chdir($this->tmpDir);
-        exec(escapeshellcmd('composer -q ' . $command), $output, $exit_code);
-        if ($exit_code !== 0) {
-            throw new \Exception('Composer returned a non-zero exit code.' . $output);
+        exec(escapeshellcmd('composer -q ' . $command), $output, $exitCode);
+        if ($exitCode !== 0) {
+            throw new \RuntimeException('Composer returned a non-zero exit code.' . $output);
         }
     }
 
@@ -165,11 +172,11 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
      *
      * @param string $directory
      */
-    protected function ensureDirectoryExistsAndClear($directory) {
-      if (is_dir($directory)) {
-        $this->fs->remove($directory);
-      }
-      $this->fs->mkdir($directory, 0777);
+    protected function ensureDirectoryExistsAndClear($directory)
+    {
+        if (is_dir($directory)) {
+            $this->fs->remove($directory);
+        }
+        $this->fs->mkdir($directory, 0777);
     }
-
 }
