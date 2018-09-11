@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [4.0.0] - 2018-09-11
+
+Since people might have shell escaped these parameters already,
+this version is a new major as it is potentially backwards incompatible. 
+
+### Changed
+
+- `accountPass` and `dbSuPw` in site install command are now shell escaped 
+
 ## [3.1.1] - 2017-08-21
 
 ### Added
@@ -115,3 +124,4 @@ Release for Robo >=0.5 (not compatible with 0.4.*!).
 [3.0.2]: https://github.com/boedah/robo-drush/compare/2.2.1...3.0.2
 [3.1.0]: https://github.com/boedah/robo-drush/compare/3.0.2...3.1.0
 [3.1.1]: https://github.com/boedah/robo-drush/compare/3.1.0...3.1.1
+[4.0.0]: https://github.com/boedah/robo-drush/compare/3.1.1...4.0.0
