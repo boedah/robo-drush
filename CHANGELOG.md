@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [4.1.0] - 2018-09-11
+
+### Added
+
+- possibility to test multiple drush versions
+
 ## [4.0.0] - 2018-09-11
 
 Since people might have shell escaped these parameters already,
@@ -125,3 +131,4 @@ Release for Robo >=0.5 (not compatible with 0.4.*!).
 [3.1.0]: https://github.com/boedah/robo-drush/compare/3.0.2...3.1.0
 [3.1.1]: https://github.com/boedah/robo-drush/compare/3.1.0...3.1.1
 [4.0.0]: https://github.com/boedah/robo-drush/compare/3.1.1...4.0.0
+[4.1.0]: https://github.com/boedah/robo-drush/compare/4.0.0...4.1.0
