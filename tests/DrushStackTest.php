@@ -163,7 +163,7 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
         chdir($this->tmpDir);
         exec(escapeshellcmd('composer -q ' . $command), $output, $exitCode);
         if ($exitCode !== 0) {
-            throw new \RuntimeException('Composer returned a non-zero exit code.' . $output);
+            throw new \RuntimeException('Composer returned a non-zero exit code.');
         }
     }
 
