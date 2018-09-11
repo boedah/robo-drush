@@ -125,7 +125,7 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
             $this->ensureDirectoryExistsAndClear($this->tmpDir);
             chdir($this->tmpDir);
             $this->writeComposerJSON();
-            $this->composer('require --update-with-dependencies drush/drush:"' . $composerDrushVersion . '"');
+            $this->composer('require --no-progress --no-suggest --update-with-dependencies drush/drush:"' . $composerDrushVersion . '"');
             $actualVersion = $this->taskDrushStack($this->tmpDir . '/vendor/bin/drush')
                 ->getVersion();
             $this->assertEquals($expectedVersion, $actualVersion);
