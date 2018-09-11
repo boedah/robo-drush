@@ -201,7 +201,7 @@ class DrushStack extends CommandStack
 
     public function dbSuPw($dbSuPw)
     {
-        $this->argForNextCommand('--db-su-pw=' . $dbSuPw);
+        $this->argForNextCommand('--db-su-pw=' . escapeshellarg($dbSuPw));
 
         return $this;
     }
