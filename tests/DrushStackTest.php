@@ -116,7 +116,11 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
      */
     public function testDrushVersion()
     {
-        foreach (['8.1.15' => '8.1.15', '9.0.0-rc1' => '9.0.0'] as $composerDrushVersion => $expectedVersion) {
+        foreach ([
+            '8.1.15' => '8.1.15',
+            '9.0.0-rc1' => '9.0.0',
+            '9.4.0' => '9.4.0'
+        ] as $composerDrushVersion => $expectedVersion) {
             if (version_compare('5.6', phpversion()) > 0 && version_compare($expectedVersion, '9.0') > 0) {
                 continue;
             }
