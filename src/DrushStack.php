@@ -237,6 +237,15 @@ class DrushStack extends CommandStack
         return $this;
     }
 
+    public function existingConfig($existingConfig = true)
+    {
+        if ($existingConfig) {
+            $this->argForNextCommand('--existing-config');
+        }
+
+        return $this;
+    }
+
     /**
      * Executes `drush status`
      *
