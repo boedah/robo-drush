@@ -94,6 +94,50 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
         $this->assertEquals($expected, $command);
     }
 
+    public function testExistingConfigDefaultsToTrue()
+    {
+        $command = $this->taskDrushStack()
+            ->existingConfig()
+            ->siteInstall('minimal')
+            ->getCommand();
+        $expected = 'drush site-install minimal -y --existing-config';
+        $this->assertEquals($expected, $command);
+    }
+
+    /**
+     * @dataProvider existingConfigWithBooleanParamIsRespectedProvider
+     *
+     * @param mixed $existingConfigParam
+     * @param string $commandParam
+     */
+    public function testExistingConfigWithBooleanParamIsRespected(
+        $existingConfigParam,
+        $commandParam = ' --existing-config'
+    ) {
+        $command = $this->taskDrushStack()
+            ->existingConfig($existingConfigParam)
+            ->siteInstall('minimal')
+            ->getCommand();
+        $expected = 'drush site-install minimal -y' . $commandParam;
+        $this->assertEquals($expected, $command);
+    }
+
+    public function existingConfigWithBooleanParamIsRespectedProvider()
+    {
+        return [
+            // trueish
+            'true' => [true],
+            '1' => [1],
+            '"1"' => ['1'],
+            // falsish
+            'false' => [false, ''],
+            '0' => [0, ''],
+            '"0"' => ['0', ''],
+            'null' => [null, ''],
+            'empty string' => ['', ''],
+        ];
+    }
+
     public function testSiteAliasIsFirstOption()
     {
         $command = $this->taskDrushStack()
@@ -142,7 +186,7 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
 
     /**
      * Should return an array of arrays with the following values:
-     * 0: $composerDrushVersion (can be different e.g. for RC versions
+     * 0: $composerDrushVersion (can be different e.g. for RC versions)
      * 1: $expectedVersion
      *
      * @return array
@@ -150,9 +194,9 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
     public function drushVersionProvider()
     {
         return [
-            ['8.1.15'],
-            ['9.0.0-rc1', '9.0.0'],
-            ['9.4.0'],
+            '8' => ['8.1.15'],
+            '9-rc1' => ['9.0.0-rc1', '9.0.0'],
+            '9' => ['9.4.0'],
         ];
     }
 
