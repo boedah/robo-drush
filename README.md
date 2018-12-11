@@ -18,23 +18,14 @@ The option -y assumed by default but can be overridden on calls to `exec()` by p
 
 ## Installation
 
-### Versions
+For new projects (and Robo >= 1.0.0-RC1), just do:
+
+    composer require --dev boedah/robo-drush
+
+For older versions of Robo, use:
 
 - `~1.0`: Robo <= 0.4.5
 - `~2.1`: Robo >= 0.5.2
-- `~3.0`: Robo >= 1.0.0-RC1
-
-Add `"boedah/robo-drush": "~3"` to your composer.json:
-
-```json
-    {
-        "require-dev": {
-            "boedah/robo-drush": "~3"
-        }
-    }
-```
-
-Execute `composer update`.
 
 ## Testing
 
@@ -47,7 +38,7 @@ Use the trait (according to your used version) in your RoboFile:
 ```php
 class RoboFile extends \Robo\Tasks
 {
-    // if you use ~2.1 for Robo >=0.5.2, or ~3 for Robo >=1.0.0-RC1
+    // if you use robo-drush ~2.1 for Robo >=0.5.2, or robo-drush >3 for Robo >=1.0.0-RC1
     use \Boedah\Robo\Task\Drush\loadTasks;
 
     // if you use ~1.0 for Robo ~0.4
