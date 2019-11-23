@@ -307,7 +307,7 @@ class DrushStack extends CommandStack
         if (-1 === version_compare($drushVersion, '6.0')) {
             $this->printTaskInfo('Will clear cache after db updates for drush '
                 . $drushVersion);
-            $this->clearCache();
+            $this->cacheRebuild();
         } else {
             $this->printTaskInfo('Will not clear cache after db updates, since drush '
                 . $drushVersion . ' should do it automatically');
@@ -345,11 +345,24 @@ class DrushStack extends CommandStack
      *
      * @return $this
      */
-    public function clearCache($name = 'all')
+    public function cacheRebuild()
     {
         $this->printTaskInfo('Clear cache');
 
-        return $this->drush('cc ' . $name);
+        return $this->drush('cache-rebuild ');
+    }
+
+    /**
+     * Clears the given cache.
+     *
+     * @deprecated Deprecated with drupal 8
+     * @param string $name cache name
+     *
+     * @return $this
+     */
+    public function clearCache($name = 'all')
+    {
+        return $this->cacheRebuild();
     }
 
     /**
