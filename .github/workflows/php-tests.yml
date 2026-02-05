@@ -35,7 +35,7 @@ jobs:
         with:
           name: PHP Tests (PHP ${{ matrix.php-version }})
           path: build/test-results.xml
-          reporter: java-junit
+          reporter: jest-junit
 
       - name: Upload test artifacts
         if: always()
