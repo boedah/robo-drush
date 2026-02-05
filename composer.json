@@ -18,14 +18,23 @@
         }
     },
     "require": {
-        "php": ">=5.5.0",
-        "consolidation/robo": "~1"
+        "php": ">=8.2",
+        "consolidation/robo": "^4.0.6 || ^5.1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.4",
-        "drush/drush": "^8.0 | ^9.0"
+        "phpunit/phpunit": "^11.0",
+        "drush/drush": "^12 || ^13",
+        "drupal/core": "^10 || ^11"
     },
     "suggest": {
         "drush/drush": "robo-drush needs a global or local Drush to use."
+    },
+    "conflict": {
+        "drush/drush": "<12"
+    },
+    "config": {
+        "allow-plugins": {
+            "drupal/core-composer-scaffold": false
+        }
     }
 }
