@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][unreleased]
 
+## [5.0.0] - 2025-02-05
+
+### Changed
+
+* trait name from `loadTasks` to `Tasks`
+* used PHPUnit version to 11
+
+#### Supported versions
+
+* PHP (`>=8.2`)
+* Robo (`^4.0.6 || ^5.1.0`)
+* Drush (`^12 || ^13`)
+
 ## [4.2.0] - 2018-12-11
 
 ### Added
