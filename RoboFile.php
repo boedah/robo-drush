@@ -4,7 +4,7 @@ class RoboFile extends \Robo\Tasks
 {
     use \Boedah\Robo\Task\Drush\loadTasks;
 
-    public function test()
+    public function test(): void
     {
         $this->stopOnFail(true);
         $this->taskPHPUnit()

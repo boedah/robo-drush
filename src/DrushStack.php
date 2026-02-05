@@ -42,27 +42,22 @@ class DrushStack extends CommandStack
 {
     use CommandArguments;
 
-    protected $argumentsForNextCommand;
+    protected string $argumentsForNextCommand = '';
 
     /**
      * Drush site alias.
      * We need to save this, since it needs to be the first argument.
-     *
-     * @var string
      */
-    protected $siteAlias;
+    protected string $siteAlias = '';
 
-    /**
-     * @var string
-     */
-    protected $drushVersion;
+    protected ?string $drushVersion = null;
 
     public function __construct($pathToDrush = 'drush')
     {
         $this->executable = $pathToDrush;
     }
 
-    public function drupalRootDirectory($drupalRootDirectory)
+    public function drupalRootDirectory($drupalRootDirectory): static
     {
         $this->printTaskInfo('Drupal root: <info>' . $drupalRootDirectory . '</info>');
         $this->option('-r', $drupalRootDirectory);
@@ -70,7 +65,7 @@ class DrushStack extends CommandStack
         return $this;
     }
 
-    public function uri($uri)
+    public function uri($uri): static
     {
         $this->printTaskInfo('URI: <info>' . $uri . '</info>');
         $this->option('-l', $uri);
@@ -78,7 +73,7 @@ class DrushStack extends CommandStack
         return $this;
     }
 
-    public function siteAlias($alias)
+    public function siteAlias($alias): static
     {
         $this->printTaskInfo('Site Alias: <info>' . $alias . '</info>');
         $this->siteAlias = $alias;
@@ -86,28 +81,28 @@ class DrushStack extends CommandStack
         return $this;
     }
 
-    public function debug()
+    public function debug(): static
     {
         $this->option('-d');
 
         return $this;
     }
 
-    public function verbose()
+    public function verbose(): static
     {
         $this->option('-v');
 
         return $this;
     }
 
-    public function simulate()
+    public function simulate(): static
     {
         $this->option('-s');
 
         return $this;
     }
 
-    public function siteName($siteName)
+    public function siteName(string $siteName): static
     {
         $this->argForNextCommand('--site-name=' . escapeshellarg($siteName));
 
@@ -116,12 +111,8 @@ class DrushStack extends CommandStack
 
     /**
      * Add an argument used in the next invocation of drush.
-     *
-     * @param string $arg
-     *
-     * @return $this
      */
-    protected function argForNextCommand($arg)
+    protected function argForNextCommand(string|float|int $arg): static
     {
         return $this->argsForNextCommand($arg);
     }
@@ -129,11 +120,9 @@ class DrushStack extends CommandStack
     /**
      * Add multiple arguments used in the next invocation of drush.
      *
-     * @param array|string $args can also be multiple parameters
-     *
-     * @return $this
+     * @param array<string|float|int>|string|float|int $args can also be multiple parameters
      */
-    protected function argsForNextCommand($args)
+    protected function argsForNextCommand(array|string|float|int $args): static
     {
         if (!is_array($args)) {
             $args = func_get_args();
@@ -143,101 +132,101 @@ class DrushStack extends CommandStack
         return $this;
     }
 
-    public function siteMail($siteMail)
+    public function siteMail(string $siteMail): static
     {
         $this->argForNextCommand('--site-mail=' . $siteMail);
 
         return $this;
     }
 
-    public function sitesSubdir($sitesSubdir)
+    public function sitesSubdir(string $sitesSubdir): static
     {
         $this->argForNextCommand('--sites-subdir=' . $sitesSubdir);
 
         return $this;
     }
 
-    public function locale($locale)
+    public function locale(string $locale): static
     {
         $this->argForNextCommand('--locale=' . $locale);
 
         return $this;
     }
 
-    public function accountMail($accountMail)
+    public function accountMail(string $accountMail): static
     {
         $this->argForNextCommand('--account-mail=' . $accountMail);
 
         return $this;
     }
 
-    public function accountName($accountName)
+    public function accountName(string $accountName): static
     {
         $this->argForNextCommand('--account-name=' . escapeshellarg($accountName));
 
         return $this;
     }
 
-    public function accountPass($accountPass)
+    public function accountPass(string $accountPass): static
     {
         $this->argForNextCommand('--account-pass=' . escapeshellarg($accountPass));
 
         return $this;
     }
 
-    public function dbPrefix($dbPrefix)
+    public function dbPrefix(string $dbPrefix): static
     {
         $this->argForNextCommand('--db-prefix=' . $dbPrefix);
 
         return $this;
     }
 
-    public function dbSu($dbSu)
+    public function dbSu(string $dbSu): static
     {
         $this->argForNextCommand('--db-su=' . $dbSu);
 
         return $this;
     }
 
-    public function dbSuPw($dbSuPw)
+    public function dbSuPw(string $dbSuPw): static
     {
         $this->argForNextCommand('--db-su-pw=' . escapeshellarg($dbSuPw));
 
         return $this;
     }
 
-    public function sqliteDbUrl($relativePath)
+    public function sqliteDbUrl(string $relativePath): static
     {
         return $this->dbUrl('sqlite://' . $relativePath);
     }
 
-    public function dbUrl($dbUrl)
+    public function dbUrl(string $dbUrl): static
     {
         $this->argForNextCommand('--db-url=' . escapeshellarg($dbUrl));
 
         return $this;
     }
 
-    public function mysqlDbUrl($dsn)
+    public function mysqlDbUrl(string $dsn): static
     {
         return $this->dbUrl('mysql://' . $dsn);
     }
 
-    public function disableUpdateStatusModule()
+    public function disableUpdateStatusModule(): static
     {
         $this->argForNextCommand('install_configure_form.update_status_module=0');
 
         return $this;
     }
 
-    public function configDir($configDir)
+    public function configDir(string $configDir): static
     {
         $this->argForNextCommand('--config-dir=' . $configDir);
 
         return $this;
     }
 
-    public function existingConfig($existingConfig = true)
+    public function existingConfig(bool $existingConfig = true): static
     {
         if ($existingConfig) {
             $this->argForNextCommand('--existing-config');
@@ -248,10 +237,8 @@ class DrushStack extends CommandStack
 
     /**
      * Executes `drush status`
-     *
-     * @return $this
      */
-    public function status()
+    public function status(): static
     {
         return $this->drush('status');
     }
@@ -259,12 +246,9 @@ class DrushStack extends CommandStack
     /**
      * Runs the given drush command.
      *
-     * @param string $command
-     * @param bool $assumeYes
-     *
-     * @return $this
+     * @param string|array<string> $command
      */
-    public function drush($command, $assumeYes = true)
+    public function drush(string|array $command, bool $assumeYes = true): static
     {
         if (is_array($command)) {
             $command = implode(' ', array_filter($command));
@@ -276,17 +260,14 @@ class DrushStack extends CommandStack
     /**
      * Prepends site-alias and appends arguments to the command.
      *
-     * @param string $command
-     * @param bool $assumeYes
-     *
      * @return string the modified command string
      */
-    protected function injectArguments($command, $assumeYes)
+    protected function injectArguments(string $command, bool $assumeYes): string
     {
         $cmd =
             $this->siteAlias . ' '
             . $command
-            . ($assumeYes ? ' -y': '')
+            . ($assumeYes ? ' -y' : '')
             . $this->arguments
             . $this->argumentsForNextCommand;
         $this->argumentsForNextCommand = '';
@@ -296,21 +277,23 @@ class DrushStack extends CommandStack
 
     /**
      * Runs pending database updates.
-     *
-     * @return $this
      */
-    public function updateDb()
+    public function updateDb(): static
     {
         $this->printTaskInfo('Do database updates');
         $this->drush('updb');
         $drushVersion = $this->getVersion();
         if (-1 === version_compare($drushVersion, '6.0')) {
-            $this->printTaskInfo('Will clear cache after db updates for drush '
-                . $drushVersion);
+            $this->printTaskInfo(
+                'Will clear cache after db updates for drush '
+                . $drushVersion
+            );
             $this->clearCache();
         } else {
-            $this->printTaskInfo('Will not clear cache after db updates, since drush '
-                . $drushVersion . ' should do it automatically');
+            $this->printTaskInfo(
+                'Will not clear cache after db updates, since drush '
+                . $drushVersion . ' should do it automatically'
+            );
         }
 
         return $this;
@@ -318,10 +301,8 @@ class DrushStack extends CommandStack
 
     /**
      * Returns the drush version.
-     *
-     * @return string
      */
-    public function getVersion()
+    public function getVersion(): string
     {
         if (empty($this->drushVersion)) {
             $isPrinted = $this->isPrinted;
@@ -341,24 +322,20 @@ class DrushStack extends CommandStack
     /**
      * Clears the given cache.
      *
-     * @param string $name cache name
-     *
-     * @return $this
+     * @param string $bin cache bin to clear
      */
-    public function clearCache($name = 'all')
+    public function clearCache(string $bin = 'all'): static
     {
         $this->printTaskInfo('Clear cache');
 
-        return $this->drush('cc ' . $name);
+        return $this->drush('cc ' . $bin);
     }
 
     /**
      * @param bool $force force revert even if Features assumes components' state are default
      * @param string $excludedFeatures space-delimited list of features to exclude from being reverted
-     *
-     * @return $this
      */
-    public function revertAllFeatures($force = false, $excludedFeatures = '')
+    public function revertAllFeatures(bool $force = false, string $excludedFeatures = ''): static
     {
         $this->printTaskInfo('Revert all features');
         $args = $excludedFeatures . ($force ? ' --force' : '');
@@ -368,10 +345,8 @@ class DrushStack extends CommandStack
 
     /**
      * Enables the maintenance mode.
-     *
-     * @return $this
      */
-    public function maintenanceOn()
+    public function maintenanceOn(): static
     {
         $this->printTaskInfo('Turn maintenance mode on');
 
@@ -380,22 +355,15 @@ class DrushStack extends CommandStack
 
     /**
      * Disables the maintenance mode.
-     *
-     * @return $this
      */
-    public function maintenanceOff()
+    public function maintenanceOff(): static
     {
         $this->printTaskInfo('Turn maintenance mode off');
 
         return $this->drush('vdel --exact maintenance_mode');
     }
 
-    /**
-     * @param string $installationProfile
-     *
-     * @return $this
-     */
-    public function siteInstall($installationProfile)
+    public function siteInstall(string $installationProfile): static
     {
         return $this->drush('site-install ' . $installationProfile);
     }
