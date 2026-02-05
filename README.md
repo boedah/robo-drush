@@ -2,7 +2,9 @@
 
 Extension to execute Drush commands in [Robo](https://github.com/consolidation/robo).
 
-[![Latest Stable Version](http://poser.pugx.org/boedah/robo-drush/v)](https://packagist.org/packages/boedah/robo-drush) [![Total Downloads](http://poser.pugx.org/boedah/robo-drush/downloads)](https://packagist.org/packages/boedah/robo-drush) [![License](http://poser.pugx.org/boedah/robo-drush/license)](https://packagist.org/packages/boedah/robo-drush) [![PHP Version Require](http://poser.pugx.org/boedah/robo-drush/require/php)](https://packagist.org/packages/boedah/robo-drush)
+[![Latest Stable Version](http://poser.pugx.org/boedah/robo-drush/v)](https://packagist.org/packages/boedah/robo-drush) [![Total Downloads](http://poser.pugx.org/boedah/robo-drush/downloads)](https://packagist.org/packages/boedah/robo-drush) [![PHP Version Require](http://poser.pugx.org/boedah/robo-drush/require/php)](https://packagist.org/packages/boedah/robo-drush)
+
+[![PHP tests](https://github.com/boedah/robo-drush/actions/workflows/php-tests.yml/badge.svg)](https://github.com/boedah/robo-drush/actions/workflows/php-tests.yml) [![License](http://poser.pugx.org/boedah/robo-drush/license)](https://packagist.org/packages/boedah/robo-drush)
 
 Runs Drush commands in a stack. You can define global options for all commands (like Drupal root and uri).
 
