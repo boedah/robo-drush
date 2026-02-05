@@ -318,6 +318,13 @@ class DrushStack extends CommandStack
         return $this->drush('cc ' . $bin);
     }
 
+    public function cacheRebuild(): static
+    {
+        $this->printTaskInfo('Cache rebuild');
+
+        return $this->drush('cr');
+    }
+
     /**
      * @param bool $force force revert even if Features assumes components' state are default
      * @param string $excludedFeatures space-delimited list of features to exclude from being reverted
