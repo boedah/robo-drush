@@ -9,4 +9,12 @@
             <directory>tests</directory>
         </testsuite>
     </testsuites>
+    <source>
+        <include>
+            <directory>src</directory>
+        </include>
+    </source>
+    <logging>
+        <junit outputFile="build/test-results.xml"/>
+    </logging>
 </phpunit>

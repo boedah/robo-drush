@@ -28,3 +28,18 @@ jobs:
 
       - name: Run tests
         run: composer test
+
+      - name: Publish test results
+        if: always()
+        uses: dorny/test-reporter@v2
+        with:
+          name: PHP Tests (PHP ${{ matrix.php-version }})
+          path: build/test-results.xml
+          reporter: java-junit
+
+      - name: Upload test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-php-${{ matrix.php-version }}
+          path: build/test-results.xml
