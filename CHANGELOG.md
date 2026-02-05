@@ -9,10 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [5.0.0] - 2025-02-05
 
+### Added
+
+* `cacheRebuild` method
+
 ### Changed
 
 * trait name from `loadTasks` to `Tasks`
+* removed `clearCache` method from `updateDb` as supported Drush versions do it automatically
 * used PHPUnit version to 11
+
+### Chores
+
+* renamed default branch to `main`
+* removed Travis CI config
+* added GitHub actions
 
 #### Supported versions
 
