@@ -1,17 +1,18 @@
 <?php
 
-class RoboFile extends \Robo\Tasks
-{
-    use \Boedah\Robo\Task\Drush\loadTasks;
+use Robo\Tasks;
 
-    public function test()
+class RoboFile extends Tasks
+{
+    use \Boedah\Robo\Task\Drush\Tasks;
+
+    public function test(): void
     {
         $this->stopOnFail(true);
-        $this->taskPHPUnit()
+        $this->taskPHPUnit(__DIR__ . '/phpunit-11.5.51.phar')
+            ->option('testdox')
             ->option('disallow-test-output')
-            ->option('report-useless-tests')
             ->option('strict-coverage')
-            ->option('-v')
             ->option('-d error_reporting=-1')
             ->bootstrap('vendor/autoload.php')
             ->arg('tests')

@@ -1,16 +1,16 @@
 # Robo Drush Extension
 
-Extension to execute Drush commands in [Robo](https://github.com/Codegyre/Robo).
+Extension to execute Drush commands in [Robo](https://github.com/consolidation/robo).
 
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/1d842f01-b2c4-415a-b372-12af7a5516e0/mini.png)](https://insight.sensiolabs.com/projects/1d842f01-b2c4-415a-b372-12af7a5516e0) [![Build Status](https://travis-ci.org/boedah/robo-drush.svg?branch=master)](https://travis-ci.org/boedah/robo-drush)  [![Latest Stable Version](https://poser.pugx.org/boedah/robo-drush/v/stable)](https://packagist.org/packages/boedah/robo-drush) [![Total Downloads](https://poser.pugx.org/boedah/robo-drush/downloads)](https://packagist.org/packages/boedah/robo-drush) [![Latest Unstable Version](https://poser.pugx.org/boedah/robo-drush/v/unstable)](https://packagist.org/packages/boedah/robo-drush) [![License](https://poser.pugx.org/boedah/robo-drush/license)](https://packagist.org/packages/boedah/robo-drush) 
+[![Latest Stable Version](http://poser.pugx.org/boedah/robo-drush/v)](https://packagist.org/packages/boedah/robo-drush) [![Total Downloads](http://poser.pugx.org/boedah/robo-drush/downloads)](https://packagist.org/packages/boedah/robo-drush) [![License](http://poser.pugx.org/boedah/robo-drush/license)](https://packagist.org/packages/boedah/robo-drush) [![PHP Version Require](http://poser.pugx.org/boedah/robo-drush/require/php)](https://packagist.org/packages/boedah/robo-drush)
 
-Runs Drush commands in stack. You can define global options for all commands (like Drupal root and uri).
+Runs Drush commands in a stack. You can define global options for all commands (like Drupal root and uri).
 
-The option -y assumed by default but can be overridden on calls to `exec()` by passing `false` as the second parameter.
+The option `-y` is assumed by default but can be overridden on calls to `exec()`
+by passing `false` as the second parameter.
 
 ## Table of contents
 
-- [Versions](#versions)
 - [Installation](#installation)
 - [Testing](#testing)
 - [Usage](#usage)
@@ -18,14 +18,7 @@ The option -y assumed by default but can be overridden on calls to `exec()` by p
 
 ## Installation
 
-For new projects (and Robo >= 1.0.0-RC1), just do:
-
-    composer require --dev boedah/robo-drush
-
-For older versions of Robo, use:
-
-- `~1.0`: Robo <= 0.4.5
-- `~2.1`: Robo >= 0.5.2
+`composer require --dev boedah/robo-drush`
 
 ## Testing
 
@@ -38,13 +31,7 @@ Use the trait (according to your used version) in your RoboFile:
 ```php
 class RoboFile extends \Robo\Tasks
 {
-    // if you use robo-drush ~2.1 for Robo >=0.5.2, or robo-drush >3 for Robo >=1.0.0-RC1
-    use \Boedah\Robo\Task\Drush\loadTasks;
-
-    // if you use ~1.0 for Robo ~0.4
-    use \Boedah\Robo\Task\Drush;
-    
-    //...
+    use \Boedah\Robo\Task\Drush\Tasks;
 }
 ```
 

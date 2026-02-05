@@ -1,48 +1,51 @@
 <?php
 
+declare(strict_types=1);
+
 use League\Container\ContainerAwareInterface;
 use League\Container\ContainerAwareTrait;
+use PHPUnit\Framework\Attributes\TestWith;
+use PHPUnit\Framework\TestCase;
+use Robo\Collection\CollectionBuilder;
 use Robo\Robo;
 use Robo\TaskAccessor;
-use Symfony\Component\Console\Output\NullOutput;
+use Robo\Tasks;
 use Symfony\Component\Filesystem\Filesystem;
 
-class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwareInterface
+final class DrushStackTest extends TestCase implements ContainerAwareInterface
 {
-    use \Boedah\Robo\Task\Drush\loadTasks;
+    use \Boedah\Robo\Task\Drush\Tasks;
     use TaskAccessor;
     use ContainerAwareTrait;
 
-    /**
-     * @var Filesystem
-     */
-    protected $fs;
+    protected Filesystem $fs;
 
-    /**
-     * @var string
-     */
-    protected $tmpDir;
+    protected string $tmpDir;
 
     // Set up the Robo container so that we can create tasks in our tests.
-    public function setUp()
+    protected function setUp(): void
     {
-        $container = Robo::createDefaultContainer(null, new NullOutput());
+        $container = Robo::createContainer();
         $this->setContainer($container);
+
+        // set empty collection builder
+        $emptyRoboFile = new Tasks;
+        $container->addShared('collectionBuilder');
+        $this->getContainer()->extend('collectionBuilder')->setConcrete(
+            new CollectionBuilder($emptyRoboFile)
+        );
 
         // Prepare temp directory.
         $this->fs = new Filesystem();
         $this->tmpDir = realpath(sys_get_temp_dir()) . DIRECTORY_SEPARATOR . 'robo-drush';
     }
 
-    // Scaffold the collection builder
-    public function collectionBuilder()
+    protected function collectionBuilder()
     {
-        $emptyRobofile = new \Robo\Tasks;
-
-        return $this->getContainer()->get('collectionBuilder', [$emptyRobofile]);
+        return $this->getContainer()->get('collectionBuilder');
     }
 
-    public function testYesIsAssumed()
+    public function testYesIsAssumed(): void
     {
         $command = $this->taskDrushStack()
             ->drush('command')
@@ -50,7 +53,7 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
         $this->assertEquals('drush command -y', $command);
     }
 
-    public function testAbsenceofYes()
+    public function testAbsenceOfYes(): void
     {
         $command = $this->taskDrushStack()
             ->drush('command', false)
@@ -58,17 +61,17 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
         $this->assertEquals('drush command', $command);
     }
 
-    public function testOptionsArePrependedBeforeEachCommand()
+    public function testOptionsArePrependedBeforeEachCommand(): void
     {
         $command = $this->taskDrushStack()
             ->drupalRootDirectory('/var/www/html/app')
             ->drush('command-1')
             ->drush('command-2')
             ->getCommand();
-        $this->assertEquals(2, preg_match_all('#-r /var/www/html/app#', $command));
+        $this->assertSame(2, preg_match_all('#-r /var/www/html/app#', (string)$command));
     }
 
-    public function testSiteInstallCommand()
+    public function testSiteInstallCommand(): void
     {
         $pw = 'p"|&w';
         $command = $this->taskDrushStack()
@@ -89,12 +92,14 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
             . ' --site-mail=site-mail@example.com'
             . ' --locale=de --account-mail=mail@example.com --account-name=' . escapeshellarg('admin')
             . ' --account-pass=' . escapeshellarg($pw)
-            . ' --db-prefix=drupal_ --db-su=su_account --db-su-pw=' . escapeshellarg($pw) . ' --db-url=' . escapeshellarg('sqlite://sit"es/default/.ht.sqlite')
+            . ' --db-prefix=drupal_ --db-su=su_account --db-su-pw=' . escapeshellarg(
+                $pw
+            ) . ' --db-url=' . escapeshellarg('sqlite://sit"es/default/.ht.sqlite')
             . ' install_configure_form.update_status_module=0';
         $this->assertEquals($expected, $command);
     }
 
-    public function testExistingConfigDefaultsToTrue()
+    public function testExistingConfigDefaultsToTrue(): void
     {
         $command = $this->taskDrushStack()
             ->existingConfig()
@@ -104,16 +109,12 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
         $this->assertEquals($expected, $command);
     }
 
-    /**
-     * @dataProvider existingConfigWithBooleanParamIsRespectedProvider
-     *
-     * @param mixed $existingConfigParam
-     * @param string $commandParam
-     */
+    #[TestWith([true, ' --existing-config'], 'true')]
+    #[TestWith([false, ''], 'false')]
     public function testExistingConfigWithBooleanParamIsRespected(
-        $existingConfigParam,
-        $commandParam = ' --existing-config'
-    ) {
+        mixed $existingConfigParam,
+        string $commandParam = ' --existing-config'
+    ): void {
         $command = $this->taskDrushStack()
             ->existingConfig($existingConfigParam)
             ->siteInstall('minimal')
@@ -122,23 +123,7 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
         $this->assertEquals($expected, $command);
     }
 
-    public function existingConfigWithBooleanParamIsRespectedProvider()
-    {
-        return [
-            // trueish
-            'true' => [true],
-            '1' => [1],
-            '"1"' => ['1'],
-            // falsish
-            'false' => [false, ''],
-            '0' => [0, ''],
-            '"0"' => ['0', ''],
-            'null' => [null, ''],
-            'empty string' => ['', ''],
-        ];
-    }
-
-    public function testSiteAliasIsFirstOption()
+    public function testSiteAliasIsFirstOption(): void
     {
         $command = $this->taskDrushStack()
             ->drupalRootDirectory('/var/www/html/app')
@@ -146,79 +131,88 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
             ->drush('command-1')
             ->drush('command-2')
             ->getCommand();
-        $this->assertEquals(2, preg_match_all('#drush @qa comm#', $command));
+        $this->assertSame(2, preg_match_all('#drush @qa comm#', (string)$command));
     }
 
-    public function testDrushStatus()
+    public function testDrushStatus(): void
     {
+        $this->writeFakeDrupalAutoload();
         $result = $this->taskDrushStack(__DIR__ . '/../vendor/bin/drush')
-            ->printed(false)
+            ->printOutput(false)
             ->status()
             ->run();
         $this->assertTrue($result->wasSuccessful(), 'Exit code was: ' . $result->getExitCode());
     }
 
     /**
-     * @dataProvider drushVersionProvider
-     *
      * @param string $composerDrushVersion version to require with composer (can be different e.g. for RC versions)
-     * @param string $expectedVersion version to compare
+     * @param string|null $expectedVersion version to compare
      */
-    public function testDrushVersion($composerDrushVersion, $expectedVersion = null)
-    {
+    #[TestWith(['12.5.3', '12.5.3.0'], '12.5.3')]
+    #[TestWith(['13.7.1', '13.7.1.0'], '13.7.1')]
+    #[TestWith(['13.7.0-rc1', '13.7.0.0'], '13.7.0.0-rc1')]
+    public function testDrushVersion(
+        string $composerDrushVersion,
+        string $expectedVersion = null
+    ): void {
         if (null === $expectedVersion) {
             $expectedVersion = $composerDrushVersion;
         }
-        if (version_compare('5.6', phpversion()) > 0 && version_compare($expectedVersion, '9.0') > 0) {
+
+        // check for incompatible PHP versions: skip if PHP < 8.3 and drush >= 13.0
+        if (version_compare('8.3', phpversion()) === 1 && version_compare($expectedVersion, '13.0') === 1) {
             $this->markTestSkipped(phpversion() . ' too low for drush ' . $expectedVersion);
         }
 
+        // set up the directory
         $cwd = getcwd();
         $this->ensureDirectoryExistsAndClear($this->tmpDir);
         chdir($this->tmpDir);
+
+        // composer require
         $this->writeComposerJSON();
-        $this->composer('require --no-progress --no-suggest --update-with-dependencies drush/drush:"' . $composerDrushVersion . '"');
-        $actualVersion = $this->taskDrushStack($this->tmpDir . '/vendor/bin/drush')
+        $composerRequireFlags = '--no-plugins --no-progress --no-suggest --update-with-dependencies';
+        $this->composer("require $composerRequireFlags drupal/core drush/drush:$composerDrushVersion");
+
+        $this->writeFakeDrupalAutoload();
+
+        // assert
+        $actualVersion = $this->taskDrushStack('vendor/bin/drush')
             ->getVersion();
         $this->assertEquals($expectedVersion, $actualVersion);
+
+        // change back
         chdir($cwd);
     }
 
     /**
-     * Should return an array of arrays with the following values:
-     * 0: $composerDrushVersion (can be different e.g. for RC versions)
-     * 1: $expectedVersion
-     *
-     * @return array
+     * Writes the default composer.json to the temp directory.
      */
-    public function drushVersionProvider()
-    {
-        return [
-            '8' => ['8.1.15'],
-            '9-rc1' => ['9.0.0-rc1', '9.0.0'],
-            '9' => ['9.4.0'],
-        ];
-    }
-
-    /**
-     * Writes the default composer json to the temp directory.
-     */
-    protected function writeComposerJSON()
+    protected function writeComposerJSON(): void
     {
         $json = json_encode($this->composerJSONDefaults(), JSON_PRETTY_PRINT);
         file_put_contents($this->tmpDir . '/composer.json', $json);
     }
 
     /**
-     * Provides the default composer.json data.
+     * Drush 13+ checks for the presence of vendor/drupal/autoload.php,
+     * so we write an empty file.
      *
-     * @return array
+     * @see DrupalBoot8::validRoot
      */
-    protected function composerJSONDefaults()
+    protected function writeFakeDrupalAutoload(): void
     {
-        return array(
-            'minimum-stability' => 'beta'
-        );
+        touch('vendor/drupal/autoload.php');
+    }
+
+    /**
+     * Provides the default composer.json data.
+     */
+    protected function composerJSONDefaults(): array
+    {
+        return [
+            'minimum-stability' => 'beta',
+        ];
     }
 
     /**
@@ -228,20 +222,18 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwa
      *
      * @throws RuntimeException
      */
-    protected function composer($command)
+    protected function composer(string $command): void
     {
         exec(escapeshellcmd('composer -q ' . $command), $output, $exitCode);
         if ($exitCode !== 0) {
-            throw new \RuntimeException('Composer returned a non-zero exit code.');
+            throw new RuntimeException('Composer returned a non-zero exit code.');
         }
     }
 
     /**
      * Makes sure the given directory exists and has no content.
-     *
-     * @param string $directory
      */
-    protected function ensureDirectoryExistsAndClear($directory)
+    protected function ensureDirectoryExistsAndClear(string $directory): void
     {
         if (is_dir($directory)) {
             $this->fs->remove($directory);
