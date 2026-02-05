@@ -1,6 +1,5 @@
 <?php
 
-use Boedah\Robo\Task\Drush\loadTasks;
 use League\Container\ContainerAwareInterface;
 use League\Container\ContainerAwareTrait;
 use Robo\Robo;
@@ -11,7 +10,7 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class DrushStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwareInterface
 {
-    use loadTasks;
+    use \Boedah\Robo\Task\Drush\Tasks;
     use TaskAccessor;
     use ContainerAwareTrait;
 

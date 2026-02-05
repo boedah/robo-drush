@@ -1,8 +1,10 @@
 <?php
 
-class RoboFile extends \Robo\Tasks
+use Robo\Tasks;
+
+class RoboFile extends Tasks
 {
-    use \Boedah\Robo\Task\Drush\loadTasks;
+    use \Boedah\Robo\Task\Drush\Tasks;
 
     public function test(): void
     {
