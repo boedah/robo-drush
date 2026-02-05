@@ -10,10 +10,9 @@ class RoboFile extends Tasks
     {
         $this->stopOnFail(true);
         $this->taskPHPUnit()
+            ->option('testdox')
             ->option('disallow-test-output')
-            ->option('report-useless-tests')
             ->option('strict-coverage')
-            ->option('-v')
             ->option('-d error_reporting=-1')
             ->bootstrap('vendor/autoload.php')
             ->arg('tests')
