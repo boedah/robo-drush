@@ -9,7 +9,7 @@ class RoboFile extends Tasks
     public function test(): void
     {
         $this->stopOnFail(true);
-        $this->taskPHPUnit()
+        $this->taskPHPUnit(__DIR__ . '/phpunit-11.5.51.phar')
             ->option('testdox')
             ->option('disallow-test-output')
             ->option('strict-coverage')
