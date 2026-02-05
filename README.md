@@ -2,7 +2,7 @@
 
 Extension to execute Drush commands in [Robo](https://github.com/Codegyre/Robo).
 
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/1d842f01-b2c4-415a-b372-12af7a5516e0/mini.png)](https://insight.sensiolabs.com/projects/1d842f01-b2c4-415a-b372-12af7a5516e0) [![Build Status](https://travis-ci.org/boedah/robo-drush.svg?branch=master)](https://travis-ci.org/boedah/robo-drush)  [![Latest Stable Version](https://poser.pugx.org/boedah/robo-drush/v/stable)](https://packagist.org/packages/boedah/robo-drush) [![Total Downloads](https://poser.pugx.org/boedah/robo-drush/downloads)](https://packagist.org/packages/boedah/robo-drush) [![Latest Unstable Version](https://poser.pugx.org/boedah/robo-drush/v/unstable)](https://packagist.org/packages/boedah/robo-drush) [![License](https://poser.pugx.org/boedah/robo-drush/license)](https://packagist.org/packages/boedah/robo-drush) 
+[![Latest Stable Version](http://poser.pugx.org/boedah/robo-drush/v)](https://packagist.org/packages/boedah/robo-drush) [![Total Downloads](http://poser.pugx.org/boedah/robo-drush/downloads)](https://packagist.org/packages/boedah/robo-drush) [![License](http://poser.pugx.org/boedah/robo-drush/license)](https://packagist.org/packages/boedah/robo-drush) [![PHP Version Require](http://poser.pugx.org/boedah/robo-drush/require/php)](https://packagist.org/packages/boedah/robo-drush)
 
 Runs Drush commands in stack. You can define global options for all commands (like Drupal root and uri).
 
